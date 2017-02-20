@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QbM-s1-ay2">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--JKPhotoBrowser-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="0.71764705880000002" blue="0.1058823529" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="JKPhotoBrowser" id="LCy-st-WUD">
+                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="wut-wt-wHB">
+                            <connections>
+                                <segue destination="IVl-sB-Llo" kind="push" id="7r5-h5-djU"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="ZDe-sf-LjA">
+                            <connections>
+                                <segue destination="ieR-Et-alC" kind="push" id="a4a-dj-uzi"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1076" y="129.98500749625188"/>
+        </scene>
+        <!--聊天-->
+        <scene sceneID="XsH-iX-1OB">
+            <objects>
+                <viewController id="ieR-Et-alC" customClass="ChatViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XyS-mT-283"/>
+                        <viewControllerLayoutGuide type="bottom" id="YIz-Te-ihT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2Xc-XN-b6c">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QTa-97-qgR">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="ieR-Et-alC" id="nUd-RJ-BrZ"/>
+                                    <outlet property="delegate" destination="ieR-Et-alC" id="AQG-1O-byq"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="QTa-97-qgR" firstAttribute="top" secondItem="2Xc-XN-b6c" secondAttribute="top" id="Je8-gx-VoM"/>
+                            <constraint firstItem="QTa-97-qgR" firstAttribute="leading" secondItem="2Xc-XN-b6c" secondAttribute="leading" id="hxh-wP-e0U"/>
+                            <constraint firstItem="YIz-Te-ihT" firstAttribute="top" secondItem="QTa-97-qgR" secondAttribute="bottom" id="i84-gG-xkF"/>
+                            <constraint firstAttribute="trailing" secondItem="QTa-97-qgR" secondAttribute="trailing" id="uga-kQ-dcI"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="聊天" id="nbU-bo-dA3"/>
+                    <connections>
+                        <outlet property="tableView" destination="QTa-97-qgR" id="hv5-cZ-Awn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gB8-B0-i25" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1818" y="498"/>
+        </scene>
+        <!--朋友圈-->
+        <scene sceneID="Yvs-Bk-LAc">
+            <objects>
+                <viewController id="IVl-sB-Llo" customClass="MomentsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fbm-A5-Ozy"/>
+                        <viewControllerLayoutGuide type="bottom" id="V7t-1W-zXw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uuH-RU-7rh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Al5-5S-gH3">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="IVl-sB-Llo" id="cpy-OM-phX"/>
+                                    <outlet property="delegate" destination="IVl-sB-Llo" id="Qz0-az-Zmc"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="V7t-1W-zXw" firstAttribute="top" secondItem="Al5-5S-gH3" secondAttribute="bottom" id="H2N-Uh-hkd"/>
+                            <constraint firstItem="Al5-5S-gH3" firstAttribute="top" secondItem="uuH-RU-7rh" secondAttribute="top" id="Nrf-jf-1qn"/>
+                            <constraint firstItem="Al5-5S-gH3" firstAttribute="leading" secondItem="uuH-RU-7rh" secondAttribute="leading" id="RQy-rd-hr0"/>
+                            <constraint firstAttribute="trailing" secondItem="Al5-5S-gH3" secondAttribute="trailing" id="gXJ-sR-12d"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="朋友圈" id="9Y4-Kj-c6w"/>
+                    <connections>
+                        <outlet property="tableView" destination="Al5-5S-gH3" id="9a7-R0-dPQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="npj-bw-dzG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1821.5999999999999" y="-168.6656671664168"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="7aT-5l-6iR">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QbM-s1-ay2" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="c16-fp-Umw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="3ah-ec-Wen"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qqh-tU-Q4f" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="97" y="130"/>
+        </scene>
+    </scenes>
+</document>
