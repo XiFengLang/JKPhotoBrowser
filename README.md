@@ -1,7 +1,8 @@
 # JKPhotoBrowser
 高仿微信、iOS10相册的图片浏览器，具备拖拽缩放、渐变效果。
 
-主要针对聊天界面、朋友圈界面实现图片浏览功能，并且高仿微信即iOS10相册的动画效果。
+主要针对聊天界面、朋友圈界面实现图片浏览功能，并且高仿微信即iOS10相册的动画效果。实现部分的代码比较复杂，不在此列出，请下载工程查看。
+
 
 ![本地图片](https://github.com/XiFengLang/JKPhotoBrowser/blob/master/JKPhotoBrowser02.gif)
 ![本地图片](https://github.com/XiFengLang/JKPhotoBrowser/blob/master/JKPhotoBrowser03.gif)
