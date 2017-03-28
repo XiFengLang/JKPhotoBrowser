@@ -145,7 +145,11 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
 
 
 
-- (void)refreshCellWithModel:(JKPhotoModel *)model collectionView:(UICollectionView *)collectionView bigImageUrl:(NSString *)imageUrl placeholderImage:(UIImage *)placeholderImage isTheImageBeTouched:(BOOL)isTheImageBeTouched {
+- (void)refreshCellWithModel:(JKPhotoModel *)model
+              collectionView:(UICollectionView *)collectionView
+                 bigImageUrl:(NSString *)imageUrl
+            placeholderImage:(UIImage *)placeholderImage
+         isTheImageBeTouched:(BOOL)isTheImageBeTouched {
     
     self.collectionView = collectionView;
     
@@ -400,13 +404,14 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
 
 
 /// 双击
-- (void)handleDoubleTapGesture:(UITapGestureRecognizer *)tap{
+- (void)handleDoubleTapGesture:(UITapGestureRecognizer *)tap {
     if (self.scrollView.zoomScale <= 1.0) {
         [self.scrollView setZoomScale:2.0 animated:YES];
     } else {
         [self.scrollView setZoomScale:1.0 animated:YES];
     }
 }
+
 
 
 /// 长按
@@ -469,39 +474,4 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     }return _displayLink;
 }
 
-
-#pragma mark - 拓展
-
-
-
-/*
-
-- (NSString *)contentTypeForImageData:(NSData *)data {
-    uint8_t c;
-    [data getBytes:&c length:1];
-    switch (c) {
-        case 0xFF:
-            return @"jpeg";
-        case 0x89:
-            return @"png";
-        case 0x47:
-            return @"gif";
-        case 0x49:
-        case 0x4D:
-            return @"tiff";
-        case 0x52:
-            if ([data length] < 12) {
-                return nil;
-            }
-            NSString *testString = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, 12)] encoding:NSASCIIStringEncoding];
-            if ([testString hasPrefix:@"RIFF"] && [testString hasSuffix:@"WEBP"]) {
-                return @"webp";
-            }
-            return nil;
-    }
-    return nil;
-}
-
- 
- */
 @end

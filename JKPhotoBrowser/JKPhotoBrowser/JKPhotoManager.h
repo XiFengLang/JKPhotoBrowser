@@ -111,16 +111,16 @@ static inline CGRect JK_MainScreen() {
 
 
 /**
+ 是否需要识别二维码，默认YES
+ */
+@property (nonatomic, assign) BOOL jk_QRCodeRecognizerEnable;
+
+
+/**
  取当前的keyWindow
  */
 @property (nonatomic, strong, readonly) UIWindow * jk_keyWindow;
 
-
-
-/**
- 取当前最上层的UIViewController
- */
-@property (nonatomic, strong, readonly) UIViewController * jk_currentViewController;
 
 
 /**
@@ -143,6 +143,13 @@ static inline CGRect JK_MainScreen() {
  *  显示图片浏览器
  */
 - (void)jk_showPhotoBrowser;
+
+
+
+/**
+ Push的时候调用，动态隐藏PhotoBrowser
+ */
+- (void)jk_hidesPhotoBrowserWhenPushed;
 
 
 

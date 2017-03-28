@@ -25,6 +25,7 @@ JKPhotoModel * photoModel = [JKPhotoModel modelWithImageView:imageView
     JKPhotoBrowser().jk_showPageController = YES;
     [[JKPhotoManager sharedManager] jk_showPhotoBrowser];
     JKPhotoBrowser().jk_delegate = self;
+    JKPhotoBrowser().jk_QRCodeRecognizerEnable = YES;
 ```
 
 ```Object-C
@@ -36,19 +37,13 @@ JKPhotoModel * photoModel = [JKPhotoModel modelWithImageView:imageView
 
 
 
-
-/**
- 将图片保存到相册的结果回调
- */
-- (void)jk_handleImageWriteToSavedPhotosAlbumWithError:(NSError *) error {
-    NSLog(@"%@",error);
+- (void)jk_handleImageWriteToSavedPhotosAlbumWithError:(NSError *)error {
+	// ...
 }
 
-
-/**
- 处理二维码识别
- */
 - (void)jk_handleQRCodeRecognitionResult:(NSString *)QRCodeContent {
     NSLog(@"%@",QRCodeContent);
+    [JKPhotoBrowser() jk_hidesPhotoBrowserWhenPushed];
+    [self.navigationController pushViewController:[JKViewController new] animated:YES];
 }
 ```

@@ -77,7 +77,7 @@ JKPhotoCollectionViewCellDelegate>
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.itemSize = JK_MainScreen().size;
         _jk_itemArray = NSArray.array;
-        
+        _jk_QRCodeRecognizerEnable = YES;
         _jk_contentView = [[UIView alloc]initWithFrame:JK_MainScreen()];
         
         UICollectionView * collectionView = [[UICollectionView alloc]initWithFrame:self.jk_keyWindow.bounds collectionViewLayout:layout];
@@ -143,6 +143,23 @@ JKPhotoCollectionViewCellDelegate>
     [self.collectionView reloadData];
     _jk_isContentViewScrolling = NO;
 }
+
+
+- (void)jk_hidesPhotoBrowserWhenPushed {
+    [UIView animateWithDuration:0.38 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        
+        CGRect tempFrame = self.jk_contentView.frame;
+        tempFrame.origin.x -= tempFrame.size.width;
+        self.jk_contentView.frame = tempFrame;
+        
+    } completion:^(BOOL finished) {
+        [self jk_didClickedImageView:nil visible:YES];
+        CGRect tempFrame = self.jk_contentView.frame;
+        tempFrame.origin.x += tempFrame.size.width;
+        self.jk_contentView.frame = tempFrame;
+    }];
+}
+
 
 
 #pragma mark - UIScrollViewDelegate
@@ -242,6 +259,7 @@ JKPhotoCollectionViewCellDelegate>
  */
 - (void)jk_didClickedImageView:(UIImageView *)imageView visible:(BOOL)visible{
     
+    self.jk_QRCodeRecognizerEnable = YES;
     if (self.jk_showPageController) {
         [self.pageController removeFromSuperview];
     }
@@ -268,13 +286,13 @@ JKPhotoCollectionViewCellDelegate>
 - (void)jk_didLongPressImageView:(UIImageView *)imageView{
     /// 保存到相册
     
-    NSString * qrCodeContent = [self jk_recognizeQRCodeFromImage:imageView.image];
-    JKActionSheet * actionSheet = [[JKActionSheet alloc] initWithCancelButtonTitle:@"取消" destructiveButtonTitle:@"保存图片到相册" otherButtonTitles:qrCodeContent ? @[@"识别图中二维码"] : nil];
-    imageView.accessibilityIdentifier = qrCodeContent;
+    NSString * qrContent = self.jk_QRCodeRecognizerEnable ? [self jk_recognizeQRCodeFromImage:imageView.image] : nil;
+    
+    JKActionSheet * actionSheet = [[JKActionSheet alloc] initWithCancelButtonTitle:@"取消" destructiveButtonTitle:@"保存图片到相册" otherButtonTitles:qrContent ? @[@"识别图中二维码"] : nil];
     
     [actionSheet showInView:[actionSheet statusBarContentView] actionHandle:^(JKActionSheet * _Nonnull tempActionSheet, NSInteger index, NSString * _Nonnull buttonTitle) {
         if (index != tempActionSheet.cancelButtonIndex) {
-            if ([buttonTitle isEqualToString:@"识别图中二维码"]) {
+            if (qrContent && [buttonTitle isEqualToString:@"识别图中二维码"]) {
                 
                 if ([self.jk_delegate respondsToSelector:@selector(jk_handleQRCodeRecognitionResult:)]) {
                     [self.jk_delegate jk_handleQRCodeRecognitionResult:imageView.accessibilityIdentifier];
@@ -300,21 +318,25 @@ JKPhotoCollectionViewCellDelegate>
 #pragma mark - 拓展
 
 
-
 /**
  识别图片中的二维码
-
  @param image 图片
  @return 二维码信息
  */
 - (NSString *)jk_recognizeQRCodeFromImage:(UIImage *)image {
     CIDetector * detecter = [CIDetector detectorOfType:CIDetectorTypeQRCode context:nil options:@{CIDetectorAccuracy:CIDetectorAccuracyHigh}];
-    NSArray<CIFeature *> * features = [detecter featuresInImage:[[CIImage alloc] initWithCGImage:image.CGImage]];
-    if (features && features.count) {
-        CIQRCodeFeature * feature = (CIQRCodeFeature *)features.firstObject;
-        return feature.messageString;
+    @try {
+        
+        /// 如果有异常，此处会被断点捕获，继续运行即可
+        NSArray<CIFeature *> * features = [detecter featuresInImage:[[CIImage alloc] initWithCGImage:image.CGImage]];
+        if (features && features.count) {
+            CIQRCodeFeature * feature = (CIQRCodeFeature *)features.firstObject;
+            return feature.messageString;
+        }
+        return nil;
+    } @catch (NSException *exception) {
+        return nil;
     }
-    return nil;
 }
 
 
@@ -338,7 +360,9 @@ JKPhotoCollectionViewCellDelegate>
     NSArray * windows = [UIApplication sharedApplication].windows;
     for (id window in windows) {
         if ([window isKindOfClass:[UIWindow class]]) {
-            return (UIWindow *)window;
+            if (((UIWindow *)window).hidden == NO) {
+                return (UIWindow *)window;
+            }
         }
     }
     return [UIApplication sharedApplication].keyWindow;
@@ -350,46 +374,6 @@ JKPhotoCollectionViewCellDelegate>
  */
 - (void)jk_resignFirstResponderIfNeeded{
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-}
-
-
-
-/**
- 取当前显示（最上层）的控制器
-
- @return 当前显示（最上层）的控制器
- */
-- (UIViewController *)jk_currentViewController {
-    UIViewController * viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    return [self findTopsideViewController:viewController];
-}
-
-// 遍历正在显示（最上层）的控制器
-- (UIViewController *)findTopsideViewController:(UIViewController *)viewController{
-    if (viewController.presentedViewController) {
-        return [self findTopsideViewController:viewController.presentedViewController];
-        
-    } else if ([viewController isKindOfClass:[UISplitViewController class]]) {
-        UISplitViewController * masterViewController = (UISplitViewController *)viewController;
-        if (masterViewController.viewControllers.count > 0)
-            return [self findTopsideViewController:masterViewController.viewControllers.lastObject];
-        else
-            return viewController;
-    } else if ([viewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController * masterViewController = (UINavigationController *)viewController;
-        if (masterViewController.viewControllers.count > 0)
-            return [self findTopsideViewController:masterViewController.topViewController];
-        else
-            return viewController;
-    } else if ([viewController isKindOfClass:[UITabBarController class]]) {
-        UITabBarController * masterViewController = (UITabBarController *) viewController;
-        if (masterViewController.viewControllers.count > 0)
-            return [self findTopsideViewController:masterViewController.selectedViewController];
-        else
-            return viewController;
-    } else {
-        return viewController;
-    }
 }
 
 @end

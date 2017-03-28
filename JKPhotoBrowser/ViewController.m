@@ -15,6 +15,8 @@
 
 #import "JKPhotoBrowser.h"
 
+#import "JKViewController.h"
+
 @interface ViewController () <JKPhotoManagerDelegate>
 
 @property (nonatomic, copy) NSArray * imageModels;
@@ -79,10 +81,10 @@
     JKPhotoBrowser().jk_showPageController = YES;
     [[JKPhotoManager sharedManager] jk_showPhotoBrowser];
     JKPhotoBrowser().jk_delegate = self;
-
+    JKPhotoBrowser().jk_QRCodeRecognizerEnable = YES;
 }
 
-- (void)jk_handleUIImageWriteToSavedPhotosAlbumWithError:(NSError *)error {
+- (void)jk_handleImageWriteToSavedPhotosAlbumWithError:(NSError *)error {
     if (error) {
         /// UIAlertController的windowLevel不够高，显示不了，所以要用自定义的HUD，添加到JKPhotoBrowser().conetntView上显示
         [HUDManager() showHUDInView:JKPhotoBrowser().jk_contentView detail:@"图片保存失败"];
@@ -93,6 +95,8 @@
 
 - (void)jk_handleQRCodeRecognitionResult:(NSString *)QRCodeContent {
     NSLog(@"%@",QRCodeContent);
+    [JKPhotoBrowser() jk_hidesPhotoBrowserWhenPushed];
+    [self.navigationController pushViewController:[JKViewController new] animated:YES];
 }
 
 

@@ -14,6 +14,7 @@
 		9F12892C1E5AC5390051A80B /* JKImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F12892B1E5AC5390051A80B /* JKImageModel.m */; };
 		9F5CD7C61E531A5900861A19 /* JKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F5CD7C31E531A5900861A19 /* JKActionSheet.m */; };
 		9F5CD7C71E531A5900861A19 /* JKActionSheetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F5CD7C51E531A5900861A19 /* JKActionSheetCell.m */; };
+		9F8BDB901E8A6BA0003F96EB /* JKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F8BDB8F1E8A6BA0003F96EB /* JKViewController.m */; };
 		9F9982F31E51C3EE003796A0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9982F21E51C3EE003796A0 /* main.m */; };
 		9F9982F61E51C3EE003796A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9982F51E51C3EE003796A0 /* AppDelegate.m */; };
 		9F9982F91E51C3EE003796A0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9982F81E51C3EE003796A0 /* ViewController.m */; };
@@ -71,6 +72,8 @@
 		9F5CD7C31E531A5900861A19 /* JKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKActionSheet.m; sourceTree = "<group>"; };
 		9F5CD7C41E531A5900861A19 /* JKActionSheetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKActionSheetCell.h; sourceTree = "<group>"; };
 		9F5CD7C51E531A5900861A19 /* JKActionSheetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKActionSheetCell.m; sourceTree = "<group>"; };
+		9F8BDB8E1E8A6BA0003F96EB /* JKViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKViewController.h; sourceTree = "<group>"; };
+		9F8BDB8F1E8A6BA0003F96EB /* JKViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKViewController.m; sourceTree = "<group>"; };
 		9F9982EE1E51C3EE003796A0 /* JKPhotoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JKPhotoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F9982F21E51C3EE003796A0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9F9982F41E51C3EE003796A0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -222,15 +225,17 @@
 		9F9982F01E51C3EE003796A0 /* JKPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				9F9983531E529826003796A0 /* NSObject+JK.m */,
-				9F9983541E529826003796A0 /* NSObject+JK.h */,
 				9FAC91871E55BC3900C47FD4 /* JKMBProgressHUD */,
 				9F9983211E51C7F6003796A0 /* SDWebImage */,
+				9F9983531E529826003796A0 /* NSObject+JK.m */,
+				9F9983541E529826003796A0 /* NSObject+JK.h */,
 				9F9982F41E51C3EE003796A0 /* AppDelegate.h */,
 				9F9982F51E51C3EE003796A0 /* AppDelegate.m */,
 				9F9983081E51C4F3003796A0 /* JKPhotoBrowser */,
 				9F9982F71E51C3EE003796A0 /* ViewController.h */,
 				9F9982F81E51C3EE003796A0 /* ViewController.m */,
+				9F8BDB8E1E8A6BA0003F96EB /* JKViewController.h */,
+				9F8BDB8F1E8A6BA0003F96EB /* JKViewController.m */,
 				9F12892E1E5AE71B0051A80B /* 聊天 */,
 				9F12892D1E5AE70E0051A80B /* 朋友圈 */,
 				9F12892A1E5AC5390051A80B /* JKImageModel.h */,
@@ -435,6 +440,7 @@
 				9F99834E1E51C7F6003796A0 /* UIImage+MultiFormat.m in Sources */,
 				9F9982F61E51C3EE003796A0 /* AppDelegate.m in Sources */,
 				9F9983551E529826003796A0 /* NSObject+JK.m in Sources */,
+				9F8BDB901E8A6BA0003F96EB /* JKViewController.m in Sources */,
 				9FAC918D1E55BC3900C47FD4 /* JKHUDManager.m in Sources */,
 				9F99834C1E51C7F6003796A0 /* UIButton+WebCache.m in Sources */,
 				9F9983131E51C4F3003796A0 /* JKPhotoManager.m in Sources */,
