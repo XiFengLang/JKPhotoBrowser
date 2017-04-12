@@ -78,6 +78,7 @@ JKPhotoCollectionViewCellDelegate>
         layout.itemSize = JK_MainScreen().size;
         _jk_itemArray = NSArray.array;
         _jk_QRCodeRecognizerEnable = YES;
+        _jk_hidesOriginalImageView = YES;
         _jk_contentView = [[UIView alloc]initWithFrame:JK_MainScreen()];
         
         UICollectionView * collectionView = [[UICollectionView alloc]initWithFrame:self.jk_keyWindow.bounds collectionViewLayout:layout];
@@ -112,6 +113,7 @@ JKPhotoCollectionViewCellDelegate>
     }
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     
+    self.jk_contentView.alpha = 1.0;
     [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
     [self jk_resignFirstResponderIfNeeded];
     
@@ -222,6 +224,7 @@ JKPhotoCollectionViewCellDelegate>
         placeholder = [self.jk_delegate jk_placeholderImageAtIndex:indexPath.row];
     }
     
+    cell.jk_hidesOriginalImageView = self.jk_hidesOriginalImageView;
     [cell refreshCellWithModel:self.jk_itemArray[indexPath.row]
                 collectionView:collectionView
                    bigImageUrl:bigImageUrl
@@ -259,15 +262,22 @@ JKPhotoCollectionViewCellDelegate>
  */
 - (void)jk_didClickedImageView:(UIImageView *)imageView visible:(BOOL)visible{
     
-    self.jk_QRCodeRecognizerEnable = YES;
-    if (self.jk_showPageController) {
-        [self.pageController removeFromSuperview];
-    }
-    
-    [self.jk_contentView removeFromSuperview];
-    self.jk_itemArray = NSArray.new;
-    [self.collectionView reloadData];
-    [self.collectionView removeFromSuperview];
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.jk_contentView.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            self.jk_QRCodeRecognizerEnable = YES;
+            self.jk_hidesOriginalImageView = YES;
+            if (self.jk_showPageController) {
+                [self.pageController removeFromSuperview];
+            }
+            
+            [self.jk_contentView removeFromSuperview];
+            self.jk_itemArray = NSArray.new;
+            [self.collectionView reloadData];
+            [self.collectionView removeFromSuperview];
+        }
+    }];
 }
 
 

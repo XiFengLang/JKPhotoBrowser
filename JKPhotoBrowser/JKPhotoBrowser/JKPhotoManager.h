@@ -132,6 +132,16 @@ static inline CGRect JK_MainScreen() {
 
 
 /**
+ 是否需要隐藏原始的imageView，default is YES，如果隐藏，拖拽的时候会出现空白
+ */
+@property (nonatomic, assign) BOOL jk_hidesOriginalImageView;
+
+
+
+
+
+
+/**
  单例
  */
 + (instancetype)sharedManager;

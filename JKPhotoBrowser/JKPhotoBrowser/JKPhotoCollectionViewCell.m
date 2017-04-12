@@ -189,7 +189,7 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
 }
 
 - (void)collectionViewWillDisplayCell {
-    self.model.imageView.hidden = YES;
+    self.model.imageView.hidden = self.jk_hidesOriginalImageView;
 }
 
 

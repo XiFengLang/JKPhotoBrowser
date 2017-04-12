@@ -53,9 +53,17 @@ UIKIT_EXTERN NSString * const JKPhotoCollectionViewCellKey;
 @property (nonatomic, strong, readonly) UIScrollView * scrollView;
 
 
-/**    手势响应代理    */
+
+/**
+ 长按、点击等手势响应代理
+ */
 @property (nonatomic, weak) id<JKPhotoCollectionViewCellDelegate> delegate;
 
+
+/**
+ 是否需要隐藏原始的imageView
+ */
+@property (nonatomic, assign) BOOL jk_hidesOriginalImageView;
 
 
 
@@ -67,9 +75,17 @@ UIKIT_EXTERN NSString * const JKPhotoCollectionViewCellKey;
          isTheImageBeTouched:(BOOL)isTheImageBeTouched;
 
 
+
+/**
+ 隐藏原来的图片
+ */
 - (void)collectionViewWillDisplayCell;
 
 
+
+/**
+ 调整imageView的位置、缩放比例，移除displayLink
+ */
 - (void)collectionViewDidEndDisplayCell;
 
 @end

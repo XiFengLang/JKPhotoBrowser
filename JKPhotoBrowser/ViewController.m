@@ -79,6 +79,7 @@
     JKPhotoBrowser().jk_itemArray = self.imageModels;
     JKPhotoBrowser().jk_currentIndex = imageView.tag - 1;
     JKPhotoBrowser().jk_showPageController = YES;
+//    JKPhotoBrowser().jk_hidesOriginalImageView = YES;
     [[JKPhotoManager sharedManager] jk_showPhotoBrowser];
     JKPhotoBrowser().jk_delegate = self;
     JKPhotoBrowser().jk_QRCodeRecognizerEnable = YES;
