@@ -4,8 +4,7 @@
 主要针对聊天界面、朋友圈界面实现图片浏览功能，并且高仿微信即iOS10相册的动画效果。实现部分的代码比较复杂，不在此列出，请下载工程查看。
 
 
-![本地图片](https://github.com/XiFengLang/JKPhotoBrowser/blob/master/JKPhotoBrowser02.gif)
-![本地图片](https://github.com/XiFengLang/JKPhotoBrowser/blob/master/JKPhotoBrowser03.gif)
+![gif](http://wx2.sinaimg.cn/mw690/c56eaed1gy1fetak5vwztg20ac0j37wk.gif)
 
 
 
@@ -47,3 +46,4 @@ JKPhotoModel * photoModel = [JKPhotoModel modelWithImageView:imageView
     [self.navigationController pushViewController:[JKViewController new] animated:YES];
 }
 ```
+![gif](http://wx4.sinaimg.cn/mw690/c56eaed1gy1fetakb98qvg20ac0j31l0.gif)![gif](http://wx4.sinaimg.cn/mw690/c56eaed1gy1fetakiyd3gg20ac0j3qv9.gif)
