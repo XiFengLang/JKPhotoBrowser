@@ -1,0 +1,1 @@
+../../../JKImageBrowser/src/JKPhotoManager.h
