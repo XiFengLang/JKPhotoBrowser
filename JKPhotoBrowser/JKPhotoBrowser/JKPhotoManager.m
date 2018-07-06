@@ -49,10 +49,12 @@ JKPhotoCollectionViewCellDelegate>
 
 - (UIPageControl *)pageController{
     if (!_pageController) {
+        BOOL isIPhoneX = CGSizeEqualToSize([UIScreen mainScreen].currentMode.size, CGSizeMake(1125, 2436));
+        
         _pageController = [[UIPageControl alloc]init];
         _pageController.numberOfPages = 1;
         _pageController.hidesForSinglePage = YES;
-        _pageController.frame = CGRectMake(0, JK_ScreenHeight() -40, JK_ScreenWidth(), 40);
+        _pageController.frame = CGRectMake(0, CGRectGetHeight(UIScreen.mainScreen.bounds) - (isIPhoneX ? 46 : 40), CGRectGetWidth(UIScreen.mainScreen.bounds), 40);
         _pageController.backgroundColor = [UIColor clearColor];
         _pageController.currentPageIndicatorTintColor = [UIColor darkGrayColor];
         _pageController.pageIndicatorTintColor = [UIColor whiteColor];
@@ -75,11 +77,11 @@ JKPhotoCollectionViewCellDelegate>
         layout.headerReferenceSize = CGSizeZero;
         layout.footerReferenceSize = CGSizeZero;
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        layout.itemSize = JK_MainScreen().size;
+        layout.itemSize = [UIScreen mainScreen].bounds.size;
         _jk_itemArray = NSArray.array;
         _jk_QRCodeRecognizerEnable = YES;
         _jk_hidesOriginalImageView = YES;
-        _jk_contentView = [[UIView alloc]initWithFrame:JK_MainScreen()];
+        _jk_contentView = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         
         UICollectionView * collectionView = [[UICollectionView alloc]initWithFrame:self.jk_keyWindow.bounds collectionViewLayout:layout];
         collectionView.backgroundColor = [UIColor blackColor];
@@ -101,7 +103,7 @@ JKPhotoCollectionViewCellDelegate>
 /// 屏幕旋转暂时没找到简单的解决方案
 
 //- (void)handleNotification:(NSNotification *)notification {
-//    ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).itemSize = JK_MainScreen().size;
+//    ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).itemSize = [UIScreen mainScreen].bounds.size;
 //    [self.collectionView setContentOffset:CGPointMake(self.jk_currentIndex* [UIScreen mainScreen].bounds.size.width, 0) animated:NO];
 //}
 
@@ -155,10 +157,11 @@ JKPhotoCollectionViewCellDelegate>
         self.jk_contentView.frame = tempFrame;
         
     } completion:^(BOOL finished) {
-        [self jk_didClickedImageView:nil visible:YES];
-        CGRect tempFrame = self.jk_contentView.frame;
-        tempFrame.origin.x += tempFrame.size.width;
-        self.jk_contentView.frame = tempFrame;
+        [self jk_didClickedImageView:nil visible:YES completion:^{
+            CGRect tempFrame = self.jk_contentView.frame;
+            tempFrame.origin.x += tempFrame.size.width;
+            self.jk_contentView.frame = tempFrame;
+        }];
     }];
 }
 
@@ -187,13 +190,13 @@ JKPhotoCollectionViewCellDelegate>
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     if (!self.didEndDecelerating) {
-        CGFloat index = scrollView.contentOffset.x/JK_ScreenWidth();
-        [self scrollViewObservedDidChangePageWithOffsetX:roundf(index)*JK_ScreenWidth()];
+        CGFloat index = scrollView.contentOffset.x/CGRectGetWidth(UIScreen.mainScreen.bounds);
+        [self scrollViewObservedDidChangePageWithOffsetX:roundf(index)*CGRectGetWidth(UIScreen.mainScreen.bounds)];
     }
 }
 
 - (void)scrollViewObservedDidChangePageWithOffsetX:(CGFloat)offsetX{
-    self.jk_currentIndex   = (NSInteger)(offsetX / JK_ScreenWidth());
+    self.jk_currentIndex   = (NSInteger)(offsetX / CGRectGetWidth(UIScreen.mainScreen.bounds));
     if (self.jk_showPageController) {
         self.pageController.currentPage = self.jk_currentIndex;
     }
@@ -260,7 +263,7 @@ JKPhotoCollectionViewCellDelegate>
 /**    
     移除视图
  */
-- (void)jk_didClickedImageView:(UIImageView *)imageView visible:(BOOL)visible{
+- (void)jk_didClickedImageView:(UIImageView *)imageView visible:(BOOL)visible completion:(void (^)(void))completion {
     
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.jk_contentView.alpha = 0;
@@ -276,6 +279,10 @@ JKPhotoCollectionViewCellDelegate>
             self.jk_itemArray = NSArray.new;
             [self.collectionView reloadData];
             [self.collectionView removeFromSuperview];
+            
+            if (completion) {
+                completion();
+            }
         }
     }];
 }
@@ -294,6 +301,11 @@ JKPhotoCollectionViewCellDelegate>
 }
 
 - (void)jk_didLongPressImageView:(UIImageView *)imageView{
+    if (!imageView.image || CGSizeEqualToSize(imageView.image.size, CGSizeZero)) {
+        return;
+    }
+    
+    
     /// 保存到相册
     
     NSString * qrContent = self.jk_QRCodeRecognizerEnable ? [self jk_recognizeQRCodeFromImage:imageView.image] : nil;

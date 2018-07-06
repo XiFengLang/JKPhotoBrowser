@@ -32,7 +32,7 @@
 //    NSLog(@"%@",[UIApplication sharedApplication].jk_declaredInstanceVariables);
     
     CGFloat margin = 10.0f;
-    CGFloat width = (JK_ScreenWidth() - 40) / 3.0 ;
+    CGFloat width = (CGRectGetWidth(UIScreen.mainScreen.bounds) - 40) / 3.0 ;
     
 //    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];

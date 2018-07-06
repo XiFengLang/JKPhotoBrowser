@@ -53,7 +53,7 @@ NSString * const JKMomentsCellKey = @"JKMomentsCellKey";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return JK_MainScreen().size.width;
+    return [UIScreen mainScreen].bounds.size.width;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {

@@ -28,7 +28,7 @@
         
         
         CGFloat margin = 10.0f;
-        CGFloat width = (JK_ScreenWidth() - 40) / 3.0 ;
+        CGFloat width = (CGRectGetWidth(UIScreen.mainScreen.bounds) - 40) / 3.0 ;
         for (NSInteger index = 1; index < 10; index ++) {
             
             CGFloat x = (margin + width) * ((index -1) % 3 + 1) - width;

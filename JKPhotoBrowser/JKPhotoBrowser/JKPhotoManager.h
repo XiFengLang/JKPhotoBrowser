@@ -11,18 +11,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static inline CGFloat JK_ScreenWidth() {
-    return [UIScreen mainScreen].bounds.size.width;
-}
-
-static inline CGFloat JK_ScreenHeight() {
-    return [UIScreen mainScreen].bounds.size.height;
-}
-
-static inline CGRect JK_MainScreen() {
-    return [UIScreen mainScreen].bounds;
-}
-
 
 
 @protocol JKPhotoManagerDelegate <NSObject>

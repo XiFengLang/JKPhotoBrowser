@@ -94,7 +94,7 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
         self.contentView.backgroundColor = [UIColor clearColor];
         
         /// UIScrollView自带缩放功能，方便实现缩放
-        UIScrollView * scrollView = [[UIScrollView alloc]initWithFrame:JK_MainScreen()];
+        UIScrollView * scrollView = [[UIScrollView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         scrollView.backgroundColor = [UIColor clearColor];
         scrollView.showsVerticalScrollIndicator = NO;
         scrollView.showsHorizontalScrollIndicator = NO;
@@ -104,7 +104,7 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
         _scrollView = scrollView;
         
         
-        self.imageView = [[UIImageView alloc]initWithFrame:JK_MainScreen()];
+        self.imageView = [[UIImageView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         self.imageView.backgroundColor = [UIColor clearColor];
         [self.scrollView addSubview:self.imageView];
         
@@ -159,7 +159,7 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     } else if (model.smallPicurl && [self isValidURLString:model.smallPicurl]) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:model.smallPicurl] placeholderImage:placeholderImage];
     } else {
-        self.imageView.image = model.imageView.image;
+        self.imageView.image = model.imageView.image ? : placeholderImage;
     }
     _model = model;
     
@@ -169,20 +169,20 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     
     
     /// 被点击的图片有放大效果
-    if (isTheImageBeTouched) {
+    if (isTheImageBeTouched && model.imageView && model.imageView.superview) {
         // 可能会出现某些控制器的控件算出的相对frame的Y坐标小20
         CGRect newImageViewFrame = [model.imageView.superview convertRect:model.imageView.frame toView:JKPhotoBrowser().jk_keyWindow];
         self.imageView.frame = newImageViewFrame;
         
         [UIView animateWithDuration:0.20 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
-            self.imageView.frame = JK_MainScreen();
+            self.imageView.frame = [UIScreen mainScreen].bounds;
         } completion:nil];
     } else {
-        self.imageView.frame = JK_MainScreen();
+        self.imageView.frame = [UIScreen mainScreen].bounds;
     }
     
-    self.scrollView.contentSize = JK_MainScreen().size;
-
+    self.scrollView.contentSize = [UIScreen mainScreen].bounds.size;
+    
     
     /// 保存原始frame的中心坐标
     self.imageViewOriginalCenter = CGPointMake(self.contentView.bounds.size.width / 2.0, self.contentView.bounds.size.height / 2.0);
@@ -322,25 +322,26 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     BOOL visible = NO;
     
     CGRect newImageViewFrame = CGRectZero;
-    if ([self.model.contentView isKindOfClass:[UITableView class]]) {
-        if (self.model.imageView && self.model.cell) {
+    if (self.model.imageView && self.model.imageView.superview) {
+        if ([self.model.contentView isKindOfClass:[UITableView class]] && self.model.cell) {
             UITableView * tableView = (UITableView *)self.model.contentView;
             UITableViewCell * cell = (UITableViewCell *)self.model.cell;
             
             /// (对于聊天界面,Cell的复用会导致ImageView的复用，动画效果会有些偏差)
             visible = [tableView.visibleCells containsObject:cell];
-        }
-    } else if ([self.model.contentView isKindOfClass:[UICollectionView class]]){
-        if (self.model.imageView && self.model.cell) {
+        } else if ([self.model.contentView isKindOfClass:[UICollectionView class]] && self.model.cell){
             UICollectionView * colletionView = (UICollectionView *)self.model.contentView;
             UICollectionViewCell * cell = (UICollectionViewCell *)self.model.cell;
             
             /// (对于聊天界面,Cell的复用会导致ImageView的复用，动画效果会有些偏差)
             visible = [colletionView.visibleCells containsObject:cell];
+        } else {
+            newImageViewFrame = [self.model.imageView.superview convertRect:self.model.imageView.frame toView:JKPhotoBrowser().jk_keyWindow];
+            visible = CGRectContainsRect(JKPhotoBrowser().jk_keyWindow.frame, newImageViewFrame);
         }
     } else {
-        newImageViewFrame = [self.model.imageView.superview convertRect:self.model.imageView.frame toView:JKPhotoBrowser().jk_keyWindow];
-        visible = CGRectContainsRect(JKPhotoBrowser().jk_keyWindow.frame, newImageViewFrame);
+        newImageViewFrame = [self.imageView.superview convertRect:self.imageView.frame toView:JKPhotoBrowser().jk_keyWindow];
+        visible = false;
     }
     
     if (self.scrollView.zoomScale > 1.0) {
@@ -372,33 +373,40 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     if (CGRectEqualToRect(newImageViewFrame, CGRectZero)) {
         newImageViewFrame = [self.model.imageView.superview convertRect:self.model.imageView.frame toView:JKPhotoBrowser().jk_keyWindow];
     }
-
+    
     /// 隐藏PageControl
     if ([self.delegate respondsToSelector:@selector(jk_hidesPageControlIfNeed)]) {
         [self.delegate jk_hidesPageControlIfNeed];
     }
-
-    self.imageView.contentMode = self.model.imageView.contentMode;
-    self.imageView.clipsToBounds = self.model.imageView.clipsToBounds;
+    
+    if (self.model.imageView) {
+        self.imageView.contentMode = self.model.imageView.contentMode;
+        self.imageView.clipsToBounds = self.model.imageView.clipsToBounds;
+    }
     
     /// 退出动画 (对于聊天界面,Cell的复用会导致ImageView的复用，动画效果会有些偏差)
     [UIView animateWithDuration:0.18 delay:0.05 options:UIViewAnimationOptionCurveEaseOut animations:^{
         if (visible) {
             imageView.frame = newImageViewFrame;
         } else {
-            imageView.hidden = YES;
+            imageView.alpha = 0.1;
         }
         [self makeContentViewTransparentWithAlpha:0];
-
+        
     } completion:^(BOOL finished) {
-        self.model.imageView.hidden = NO;
+        if (visible == false) {
+            imageView.hidden = true;
+        }
+        if (self.model.imageView) self.model.imageView.hidden = NO;
         
         if (finished) {
-            if ([self.delegate respondsToSelector:@selector(jk_didClickedImageView:visible:)]) {
-                [self.delegate jk_didClickedImageView:self.imageView visible:visible];
+            if ([self.delegate respondsToSelector:@selector(jk_didClickedImageView:visible:completion:)]) {
+                [self.delegate jk_didClickedImageView:self.imageView visible:visible completion:^{
+                    imageView.alpha = 1.0;
+                    imageView.hidden = NO;
+                }];
             }
         }
-        imageView.hidden = NO;
     }];
 }
 

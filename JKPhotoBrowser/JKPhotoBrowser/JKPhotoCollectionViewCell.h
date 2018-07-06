@@ -15,7 +15,7 @@
  *
  *  @param visible   是否超出屏幕
  */
-- (void)jk_didClickedImageView:(UIImageView *)imageView visible:(BOOL)visible;
+- (void)jk_didClickedImageView:(UIImageView *)imageView visible:(BOOL)visible completion:(void(^)(void))completion;
 
 
 
