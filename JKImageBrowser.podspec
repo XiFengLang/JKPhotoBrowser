@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "JKPhotoBrowser"
+  s.name         = "JKImageBrowser"
   s.version      = "1.0.0"
   s.summary      = "仿微信图片浏览控件"
   s.homepage     = "https://github.com/XiFengLang/JKPhotoBrowser"
