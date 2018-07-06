@@ -88,9 +88,9 @@
     
     self.actionHandle = actionHandle;
     self.backgroundButton.userInteractionEnabled = NO;
-    
+    BOOL isIPhoneX = CGSizeEqualToSize([UIScreen mainScreen].currentMode.size, CGSizeMake(1125, 2436));
     CGFloat tableViewHeight = self.tableView.bounds.size.height;
-    CGRect tableViewFrame = CGRectMake(0, JKMainScreenSize().height - tableViewHeight, JKMainScreenSize().width, tableViewHeight);
+    CGRect tableViewFrame = CGRectMake(0, JKMainScreenSize().height - tableViewHeight - (isIPhoneX ? 34 : 0), JKMainScreenSize().width, tableViewHeight);
     [UIView animateWithDuration:0.18 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.backgroundButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
         self.tableView.frame = tableViewFrame;

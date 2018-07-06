@@ -20,8 +20,22 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>访问相册</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>APP请求访问您的媒体资料库</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>APP请求访问日历，以实现基于日程的消息展示</string>
+    <key>NSCameraUsageDescription</key>
+    <string>APP请求访问您的相机，以实现拍照或二维码识别</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>APP请求访问您的GPS定位，以实现基于位置的消息推送和商品推荐</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>APP请求访问您的GPS定位，以实现基于位置的消息推送和商品推荐</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>APP请求访问您的麦克风，以实现录音功能</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>APP请求访问您的相册，以上传图片</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>APP请求访问您的相册，以上传图片</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
