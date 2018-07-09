@@ -9,6 +9,7 @@
 #import "JKPhotoCollectionViewCell.h"
 #import "JKPhotoManager.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIView+WebCache.h>
 
 
 NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
@@ -154,7 +155,7 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     self.collectionView = collectionView;
     
     if (imageUrl && [self isValidURLString:imageUrl]) {
-//        [self.imageView setShowActivityIndicatorView:YES];
+        [self.imageView sd_setShowActivityIndicatorView:YES];
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:placeholderImage options:SDWebImageCacheMemoryOnly];
     } else if (model.smallPicurl && [self isValidURLString:model.smallPicurl]) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:model.smallPicurl] placeholderImage:placeholderImage];
