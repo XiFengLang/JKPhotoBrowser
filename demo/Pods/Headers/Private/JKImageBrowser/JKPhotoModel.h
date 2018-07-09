@@ -1,0 +1,1 @@
+../../../JKImageBrowser/src/JKPhotoModel.h
