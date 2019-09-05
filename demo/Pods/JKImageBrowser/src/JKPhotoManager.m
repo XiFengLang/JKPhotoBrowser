@@ -100,29 +100,23 @@ JKPhotoCollectionViewCellDelegate>
 }
 
 
-/// 屏幕旋转暂时没找到简单的解决方案
-
-//- (void)handleNotification:(NSNotification *)notification {
-//    ((UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout).itemSize = [UIScreen mainScreen].bounds.size;
-//    [self.collectionView setContentOffset:CGPointMake(self.jk_currentIndex* [UIScreen mainScreen].bounds.size.width, 0) animated:NO];
-//}
-
-
 - (void)jk_showPhotoBrowser{
     if (self.jk_itemArray == nil || self.jk_itemArray.count == 0) {
         NSLog(@"<JKPhotoModel *> * jk_itemArray 是空数组");
         return;
     }
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     
     self.jk_contentView.alpha = 1.0;
     [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
     [self jk_resignFirstResponderIfNeeded];
     
-    /// 把View添加到statusBar.superview上，能遮盖statusBar
-    /// 不能直接加到statusBar上，不然没法响应事件
-    
-    [[self jk_statusBar].superview addSubview:self.jk_contentView];
+    /// iOS13之前：把View添加到statusBar.superview上，能遮盖statusBar，不能直接加到statusBar上，不然没法响应事件
+    /// iOS13后，添加在Keywindow上
+    if (@available(iOS 13.0, *)) {
+        [[self jk_keyWindow] addSubview:self.jk_contentView];
+    } else {
+        [[self jk_statusBar].superview addSubview:self.jk_contentView];
+    }
     [self.jk_contentView addSubview:self.collectionView];
     
     if (self.jk_showPageController) {
@@ -130,7 +124,7 @@ JKPhotoCollectionViewCellDelegate>
         self.pageController.numberOfPages = self.jk_itemArray.count;
         self.pageController.currentPage = self.jk_currentIndex;
         self.pageController.hidden = NO;
-    
+        
     } else if (nil != _pageController) {
         [self.pageController removeFromSuperview];
         self.pageController = nil;
@@ -260,8 +254,8 @@ JKPhotoCollectionViewCellDelegate>
 #pragma mark - JKPhotoCollectionViewCellDelegate
 
 
-/**    
-    移除视图
+/**
+ 移除视图
  */
 - (void)jk_didClickedImageView:(UIImageView *)imageView visible:(BOOL)visible completion:(void (^)(void))completion {
     
@@ -312,7 +306,7 @@ JKPhotoCollectionViewCellDelegate>
     
     JKActionSheet * actionSheet = [[JKActionSheet alloc] initWithCancelButtonTitle:@"取消" destructiveButtonTitle:@"保存图片到相册" otherButtonTitles:qrContent ? @[@"识别图中二维码"] : nil];
     
-    [actionSheet showInView:[actionSheet statusBarContentView] actionHandle:^(JKActionSheet * _Nonnull tempActionSheet, NSInteger index, NSString * _Nonnull buttonTitle) {
+    [actionSheet showInView:self.jk_contentView.superview actionHandle:^(JKActionSheet * _Nonnull tempActionSheet, NSInteger index, NSString * _Nonnull buttonTitle) {
         if (index != tempActionSheet.cancelButtonIndex) {
             if (qrContent && [buttonTitle isEqualToString:@"识别图中二维码"]) {
                 
@@ -364,23 +358,43 @@ JKPhotoCollectionViewCellDelegate>
 
 
 /**
- 用KVC取statusBar
-
+ 用KVC取statusBar，⚠️iOS13取出的statusBar不能用于展示
+ 
  @return statusBar
  */
 - (UIView *)jk_statusBar {
-    return [[UIApplication sharedApplication] valueForKey:@"statusBar"];
+    if (@available(iOS 13.0, *)) {
+        @try {
+            __auto_type statusBarManager = UIApplication.sharedApplication.keyWindow.windowScene.statusBarManager;
+            typedef UIView * (* MessageSendFunc)(id, SEL);
+            SEL selector = NSSelectorFromString([@"creat*&eLocalSta*&tusBar" stringByReplacingOccurrencesOfString:@"*&" withString:@""]);
+            IMP imp = [statusBarManager methodForSelector:selector];
+            MessageSendFunc invoke = (MessageSendFunc)imp;
+            UIView * localStatusBar = invoke(statusBarManager, selector);
+            
+            selector = NSSelectorFromString(@"statusBar");
+            imp = [localStatusBar methodForSelector:selector];
+            invoke = (MessageSendFunc)imp;
+            UIView * statusBar = invoke(localStatusBar, selector);
+            /// 取出的localStatusBar.superView = nil，添加视图没法展示
+            return statusBar.subviews.firstObject;
+        } @catch (NSException *exception) {
+            return [self jk_keyWindow];
+        }
+    } else {
+        return [[UIApplication sharedApplication] valueForKey:@"statusBar"];
+    }
 }
 
 
 /**
  遍历取window
-
+ 
  @return keyWindow
  */
 - (UIWindow *)jk_keyWindow {
-    NSArray * windows = [UIApplication sharedApplication].windows;
-    for (id window in windows) {
+    NSArray <UIWindow *>* windows = [UIApplication sharedApplication].windows;
+    for (UIWindow * window in windows) {
         if ([window isKindOfClass:[UIWindow class]]) {
             if (((UIWindow *)window).hidden == NO) {
                 return (UIWindow *)window;

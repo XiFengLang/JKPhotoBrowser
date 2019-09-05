@@ -23,14 +23,14 @@ typedef void(^JKActionSheetHandle)(JKActionSheet * tempActionSheet, NSInteger in
 @property (nonatomic, copy, readonly) NSString * cancelButtonTitle;
 @property (nonatomic, assign, readonly) NSInteger cancelButtonIndex;
 
-
+ 
 
 /**
- UIStatusBar的父视图，添加在其上面的View，可以盖住UIStatusBar
+ 【已废弃】UIStatusBar的父视图，添加在其上面的View，可以盖住UIStatusBar
 
  @return UIStatusBar的父视图
  */
-- (UIView *)statusBarContentView;
+//- (UIView *)statusBarContentView;
 
 
 /**
