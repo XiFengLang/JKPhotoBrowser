@@ -1,22 +1,22 @@
 PODS:
-  - JKImageBrowser (1.0.2):
+  - JKImageBrowser (1.0.3):
     - SDWebImage (~> 4.4.1)
-  - SDWebImage (4.4.1):
-    - SDWebImage/Core (= 4.4.1)
-  - SDWebImage/Core (4.4.1)
+  - SDWebImage (4.4.7):
+    - SDWebImage/Core (= 4.4.7)
+  - SDWebImage/Core (4.4.7)
 
 DEPENDENCIES:
-  - JKImageBrowser (~> 1.0.2)
+  - JKImageBrowser (~> 1.0.3)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - JKImageBrowser
     - SDWebImage
 
 SPEC CHECKSUMS:
-  JKImageBrowser: 1f0ebafe4c2cfe7f879ce98102f35e518310062d
-  SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
+  JKImageBrowser: a969f27bd3514e8ff51e8762256c7df9c8ebe1d7
+  SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
 
-PODFILE CHECKSUM: d9057416d68edae6407f6bc6b65890001bd175ac
+PODFILE CHECKSUM: 95d619d3f1ef523308e8ed55e54afbfc7353d6c7
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.0.beta.2

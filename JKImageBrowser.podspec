@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "JKImageBrowser"
-  s.version      = "1.0.2"
+  s.version      = "1.0.4"
   s.summary      = "仿微信图片浏览控件"
   s.homepage     = "https://github.com/XiFengLang/JKPhotoBrowser"
 

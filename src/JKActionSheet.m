@@ -220,9 +220,9 @@ NSString * const JKActionSheetCellKey = @"JKActionSheetCellKey";
 
 #pragma mark - 拓展
 
-- (UIView *)statusBarContentView {
-    return [[[UIApplication sharedApplication] valueForKey:@"statusBar"] superview];
-}
+//- (UIView *)statusBarContentView {
+//    return [[[UIApplication sharedApplication] valueForKey:@"statusBar"] superview];
+//}
 
 - (void)setFrame:(CGRect)frame {
     [super setFrame:CGRectZero];
