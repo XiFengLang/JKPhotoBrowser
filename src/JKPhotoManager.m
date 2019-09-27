@@ -363,6 +363,7 @@ JKPhotoCollectionViewCellDelegate>
  @return statusBar
  */
 - (UIView *)jk_statusBar {
+#ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) {
         @try {
             __auto_type statusBarManager = UIApplication.sharedApplication.keyWindow.windowScene.statusBarManager;
@@ -384,6 +385,9 @@ JKPhotoCollectionViewCellDelegate>
     } else {
         return [[UIApplication sharedApplication] valueForKey:@"statusBar"];
     }
+#else
+    return [[UIApplication sharedApplication] valueForKey:@"statusBar"];
+#endif
 }
 
 
