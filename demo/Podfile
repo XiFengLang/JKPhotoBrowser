@@ -2,7 +2,7 @@
 # platform :ios, '9.0'
 
 platform :ios, '8.0'
-#source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/CocoaPods/Specs.git'
 source 'https://cdn.cocoapods.org/'
 
 target 'JKPhotoBrowser' do
@@ -12,6 +12,6 @@ target 'JKPhotoBrowser' do
   # Pods for JKPhotoBrowser
 
 #pod 'SDWebImage', '>= 5.0'
-pod 'JKImageBrowser', '~> 1.0.4'
+pod 'JKImageBrowser', '~> 1.0.9'
 
 end

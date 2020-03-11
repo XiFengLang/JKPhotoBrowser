@@ -11,7 +11,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SDWebImage/UIView+WebCache.h>
 
-
+ 
 NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
 
 @interface JKPhotoCollectionViewCell ()<UIScrollViewDelegate, UIGestureRecognizerDelegate>
@@ -155,10 +155,12 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     self.collectionView = collectionView;
     
     if (imageUrl && [self isValidURLString:imageUrl]) {
-        [self.imageView sd_setShowActivityIndicatorView:YES];
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:placeholderImage options:SDWebImageCacheMemoryOnly];
+        self.imageView.sd_imageIndicator = [SDWebImageActivityIndicator whiteIndicator];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:placeholderImage];
+        
     } else if (model.smallPicurl && [self isValidURLString:model.smallPicurl]) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:model.smallPicurl] placeholderImage:placeholderImage];
+        
     } else {
         self.imageView.image = model.imageView.image ? : placeholderImage;
     }

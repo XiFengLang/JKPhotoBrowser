@@ -10,8 +10,10 @@
 #import "JKActionSheetCell.h"
 
 @interface JKActionSheet () <UITableViewDelegate, UITableViewDataSource>
-
+ 
 @property (nonatomic, strong) UIButton * backgroundButton;
+
+@property (nonatomic, strong) UIView * contentView;
 
 @property (nonatomic, strong) UITableView * tableView;
 
@@ -58,13 +60,19 @@
         [self.backgroundButton addTarget:self action:@selector(didClickedBackgroundButton:) forControlEvents:UIControlEventTouchUpInside];
         
         
-        CGFloat tableViewHeight = [self buttonCount] * JKActionSheetTableViewRowHeight + (self.buttonTitles.count == 2 ? 10 : 0);
-        CGRect tableViewFrame = CGRectMake(0, JKMainScreenSize().height, JKMainScreenSize().width, tableViewHeight);
         
+        CGFloat tableViewHeight = [self buttonCount] * JKActionSheetTableViewRowHeight + (self.buttonTitles.count == 2 ? 10 : 0);
+        
+        
+        self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0, JKPhotoManager_MainScreenSize().height, JKPhotoManager_MainScreenSize().width, tableViewHeight + (JKPhotoManager_iPhoneX() ? 34 : 0))];
+        self.contentView.backgroundColor = UIColor.lightGrayColor;
+        [self.backgroundButton addSubview:self.contentView];
+        
+        CGRect tableViewFrame = CGRectMake(0, 0, JKPhotoManager_MainScreenSize().width, tableViewHeight);
         self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStylePlain];
         self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.scrollEnabled = NO;
-        [self.backgroundButton addSubview:self.tableView];
+        [self.contentView addSubview:self.tableView];
         
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
@@ -88,12 +96,16 @@
     
     self.actionHandle = actionHandle;
     self.backgroundButton.userInteractionEnabled = NO;
-    BOOL isIPhoneX = CGSizeEqualToSize([UIScreen mainScreen].currentMode.size, CGSizeMake(1125, 2436));
-    CGFloat tableViewHeight = self.tableView.bounds.size.height;
-    CGRect tableViewFrame = CGRectMake(0, JKMainScreenSize().height - tableViewHeight - (isIPhoneX ? 34 : 0), JKMainScreenSize().width, tableViewHeight);
+    
+    CGFloat viewHeight = CGRectGetHeight(self.contentView.frame);
+    CGRect viewFrame = CGRectMake(0, JKPhotoManager_MainScreenSize().height - viewHeight, JKPhotoManager_MainScreenSize().width, viewHeight);
+    
+    
     [UIView animateWithDuration:0.18 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        
         self.backgroundButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
-        self.tableView.frame = tableViewFrame;
+        self.contentView.frame = viewFrame;
+        
     } completion:^(BOOL finished) {
         self.backgroundButton.userInteractionEnabled = YES;
     }];
@@ -114,8 +126,13 @@
     self.buttonTitles = buttonTitles.copy;
     
     CGFloat tableViewHeight = [self buttonCount] * JKActionSheetTableViewRowHeight + (self.buttonTitles.count == 2 ? 10 : 0);;
-    self.tableView.frame = CGRectMake(0, JKMainScreenSize().height - tableViewHeight, JKMainScreenSize().width, tableViewHeight);
     
+    CGFloat viewHeight = tableViewHeight + (JKPhotoManager_iPhoneX() ? 34 : 0);
+    CGRect viewFrame = CGRectMake(0, JKPhotoManager_MainScreenSize().height - viewHeight, JKPhotoManager_MainScreenSize().width, viewHeight);
+    
+    
+    self.tableView.frame = CGRectMake(0, 0, JKPhotoManager_MainScreenSize().width, tableViewHeight);
+    self.contentView.frame = viewFrame;
     [self.tableView reloadData];
 }
 
@@ -163,7 +180,7 @@ NSString * const JKActionSheetCellKey = @"JKActionSheetCellKey";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section) {
-        UITableViewHeaderFooterView * headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, JKMainScreenSize().width, [self tableView:tableView heightForHeaderInSection:section])];
+        UITableViewHeaderFooterView * headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, JKPhotoManager_MainScreenSize().width, [self tableView:tableView heightForHeaderInSection:section])];
         headerView.contentView.backgroundColor = [UIColor lightGrayColor];
         return headerView;
     }return nil;
@@ -197,13 +214,14 @@ NSString * const JKActionSheetCellKey = @"JKActionSheetCellKey";
 #pragma mark - action
 
 - (void)dismissActionSheetAnimated {
+    CGRect frame = self.contentView.frame;
+    frame.origin.y = JKPhotoManager_MainScreenSize().height;
     
-    
-    CGRect temp = self.tableView.frame;
-    temp.origin.y = JKMainScreenSize().height;
     [UIView animateWithDuration:0.18 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        
         self.backgroundButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
-        self.tableView.frame = temp;
+        self.contentView.frame = frame;
+        
     } completion:^(BOOL finished) {
         if (finished) {
             [self.backgroundButton removeFromSuperview];

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "JKPhotoModel.h"
+#import "JKPhoneBrowserFunction.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
