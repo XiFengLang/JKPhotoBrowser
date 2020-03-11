@@ -11,7 +11,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SDWebImage/UIView+WebCache.h>
 
-
+ 
 NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
 
 @interface JKPhotoCollectionViewCell ()<UIScrollViewDelegate, UIGestureRecognizerDelegate>

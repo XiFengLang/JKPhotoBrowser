@@ -10,7 +10,7 @@
 #import "JKActionSheetCell.h"
 
 @interface JKActionSheet () <UITableViewDelegate, UITableViewDataSource>
-
+ 
 @property (nonatomic, strong) UIButton * backgroundButton;
 
 @property (nonatomic, strong) UIView * contentView;
