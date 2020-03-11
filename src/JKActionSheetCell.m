@@ -24,7 +24,7 @@ const CGFloat JKActionSheetTableViewRowHeight = 46;
         self.contentView.backgroundColor = [UIColor clearColor];
         self.backgroundColor = [UIColor clearColor];
         
-        self.jk_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, JKMainScreenSize().width, JKActionSheetTableViewRowHeight)];
+        self.jk_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, JKPhotoManager_MainScreenSize().width, JKActionSheetTableViewRowHeight)];
         self.jk_titleLabel.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];
         self.jk_titleLabel.textAlignment = NSTextAlignmentCenter;
         

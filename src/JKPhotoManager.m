@@ -47,9 +47,11 @@ JKPhotoCollectionViewCellDelegate>
 
 
 
+
+
 - (UIPageControl *)pageController{
     if (!_pageController) {
-        BOOL isIPhoneX = CGSizeEqualToSize([UIScreen mainScreen].currentMode.size, CGSizeMake(1125, 2436));
+        BOOL isIPhoneX = JKPhotoManager_iPhoneX();
         
         _pageController = [[UIPageControl alloc]init];
         _pageController.numberOfPages = 1;
@@ -397,15 +399,8 @@ JKPhotoCollectionViewCellDelegate>
  @return keyWindow
  */
 - (UIWindow *)jk_keyWindow {
-    NSArray <UIWindow *>* windows = [UIApplication sharedApplication].windows;
-    for (UIWindow * window in windows) {
-        if ([window isKindOfClass:[UIWindow class]]) {
-            if (((UIWindow *)window).hidden == NO) {
-                return (UIWindow *)window;
-            }
-        }
-    }
-    return [UIApplication sharedApplication].keyWindow;
+    UIWindow * windown = JKPhotoManager_KeyWindow();
+    return windown ?: [UIApplication sharedApplication].keyWindow;
 }
 
 
@@ -415,5 +410,8 @@ JKPhotoCollectionViewCellDelegate>
 - (void)jk_resignFirstResponderIfNeeded{
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
+
+
+
 
 @end

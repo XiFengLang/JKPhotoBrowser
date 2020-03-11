@@ -11,7 +11,7 @@ target 'JKPhotoBrowser' do
 
   # Pods for JKPhotoBrowser
 
-#pod 'SDWebImage', '~> 4.4.1'
+#pod 'SDWebImage', '>= 5.0'
 pod 'JKImageBrowser', '~> 1.0.4'
 
 end

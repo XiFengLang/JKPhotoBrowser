@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "JKImageBrowser"
-  s.version      = "1.0.6"
+  s.version      = "1.0.8"
   s.summary      = "仿微信图片浏览控件"
   s.homepage     = "https://github.com/XiFengLang/JKPhotoBrowser"
 
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.framework    = "UIKit"
   s.requires_arc = true
   s.source_files = "src/*.{h,m}"
-  s.dependency 'SDWebImage','~> 4.4.1'
+  s.dependency 'SDWebImage','>= 5.0'
   
 
 end

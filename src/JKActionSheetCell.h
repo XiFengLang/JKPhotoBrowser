@@ -7,10 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-static inline CGSize JKMainScreenSize() {
-    return [UIScreen mainScreen].bounds.size;
-}
+#import "JKPhoneBrowserFunction.h"
 
 
 typedef NS_ENUM(NSUInteger, JKActionSheetCellType) {

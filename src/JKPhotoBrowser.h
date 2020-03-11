@@ -9,10 +9,9 @@
 #ifndef JKPhotoBrowser_h
 #define JKPhotoBrowser_h
 
-
 #import "JKPhotoModel.h"
 #import "JKPhotoManager.h"
 #import "JKActionSheet.h"
-
+#import "JKPhoneBrowserFunction.h"
 
 #endif /* JKPhotoBrowser_h */
