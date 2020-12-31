@@ -10,20 +10,11 @@
 #import "JKPhoneBrowserFunction.h"
 
 
-typedef NS_ENUM(NSUInteger, JKActionSheetCellType) {
-    JKActionSheetCellTypeDefault = 0,
-    JKActionSheetCellTypeDestructive,
-    JKActionSheetCellTypeCancel,
-};
-
 UIKIT_EXTERN const CGFloat JKActionSheetTableViewRowHeight;
 
 @interface JKActionSheetCell : UITableViewCell
 
-
-@property (nonatomic, strong) UILabel * jk_titleLabel;
-
-- (void)configureCellWithTitle:(NSString *)title type:(JKActionSheetCellType)type;
+@property (nonatomic, strong) UILabel * titleLabel;
 
 
 @end

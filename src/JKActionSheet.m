@@ -8,242 +8,229 @@
 
 #import "JKActionSheet.h"
 #import "JKActionSheetCell.h"
+#import <Masonry/Masonry.h>
+
+@implementation JKAction
+
+- (NSMutableDictionary *)ext{
+    if (!_ext) {
+        _ext = [[NSMutableDictionary alloc]init];
+    }return _ext;
+}
+
++ (instancetype)actionWithTitle:(NSString *)title selectionHandler:(void (^ _Nullable)(JKAction * _Nonnull))selectionHandler {
+    JKAction * action = [[self alloc] init];
+    action.title = title;
+    action.selectionHandler = selectionHandler;
+    return action;
+}
+
+@end
+
+
+
+
+
+
+
 
 @interface JKActionSheet () <UITableViewDelegate, UITableViewDataSource>
- 
-@property (nonatomic, strong) UIButton * backgroundButton;
 
-@property (nonatomic, strong) UIView * contentView;
+/// conatiner高度
+@property (nonatomic, assign) CGFloat containerHeight;
+
+/// 底部的容器
+@property (nonatomic, strong, readonly) UIView * containerView;
+
+@property (nonatomic, strong) UIView * safeAreaView;
 
 @property (nonatomic, strong) UITableView * tableView;
+@property (nonatomic, strong) UIButton * cancelButton;
+@property (nonatomic, strong) UIView * buoyView;
 
-@property (nonatomic, copy) NSArray * buttonTitles;
 
-
-@property (nonatomic, copy) JKActionSheetHandle actionHandle;
 @end
 
 @implementation JKActionSheet
 
 
-
-
-
-- (instancetype)initWithCancelButtonTitle:(NSString *)cancelButtonTitle
-                   destructiveButtonTitle:(NSString *)destructiveButtonTitle
-                        otherButtonTitles:(NSArray<NSString *> *)otherButtonTitles {
-    
-    if (self = [super initWithFrame:CGRectZero]) {
-
-        _cancelButtonIndex = -1;
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
+        
+        /// 避免因圆角而出现透明角的现象
+        _safeAreaView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.frame) - 40,
+                                                                 CGRectGetWidth(self.frame), 40)];
+        self.safeAreaView.backgroundColor = JKPhotoManager_Color(0xFF1A1A1A);
+        [self addSubview:self.safeAreaView];
+        
+        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.frame) - self.containerHeight, CGRectGetWidth(self.frame), self.containerHeight)];
+        _containerView.backgroundColor = JKPhotoManager_Color(0xFF1A1A1A);
+        [self addSubview:self.containerView];
         
         
-        NSMutableArray * mutArray = [NSMutableArray array];
-        if (otherButtonTitles && otherButtonTitles.count) {
-            [mutArray addObjectsFromArray:otherButtonTitles];
-        }
-        if (destructiveButtonTitle && destructiveButtonTitle.length) {
-            [mutArray addObject:destructiveButtonTitle];
-            _destructiveButtonTitle = destructiveButtonTitle;
-        }
-        NSMutableArray * buttonTitles = [NSMutableArray array];
-        [buttonTitles addObject:mutArray.copy];
-        
-        if (cancelButtonTitle && cancelButtonTitle.length) {
-            [buttonTitles addObject:@[cancelButtonTitle]];
-            _cancelButtonTitle = cancelButtonTitle;
-        }
-        self.buttonTitles = buttonTitles.copy;
-        
-        self.backgroundButton = [[UIButton alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        self.backgroundButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
-        [self.backgroundButton addTarget:self action:@selector(didClickedBackgroundButton:) forControlEvents:UIControlEventTouchUpInside];
-        
-        
-        
-        CGFloat tableViewHeight = [self buttonCount] * JKActionSheetTableViewRowHeight + (self.buttonTitles.count == 2 ? 10 : 0);
-        
-        
-        self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0, JKPhotoManager_MainScreenSize().height, JKPhotoManager_MainScreenSize().width, tableViewHeight + (JKPhotoManager_iPhoneX() ? 34 : 0))];
-        self.contentView.backgroundColor = UIColor.lightGrayColor;
-        [self.backgroundButton addSubview:self.contentView];
-        
-        CGRect tableViewFrame = CGRectMake(0, 0, JKPhotoManager_MainScreenSize().width, tableViewHeight);
-        self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStylePlain];
-        self.tableView.backgroundColor = [UIColor clearColor];
-        self.tableView.scrollEnabled = NO;
-        [self.contentView addSubview:self.tableView];
-        
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
-        
+        [self addTarget:self action:@selector(dismissManually) forControlEvents:(UIControlEventTouchUpInside)];
+        self.containerHeight = 150;
     }return self;
 }
 
-
-- (NSUInteger)buttonCount {
-    __block NSUInteger count = 0;
-    [self.buttonTitles enumerateObjectsUsingBlock:^(NSArray * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        count += obj.count;
-    }];
-    return count;
+- (instancetype)initWithFrame:(CGRect)frame actions:(NSArray <JKAction *>*)actions {
+    if (self = [self initWithFrame:frame]) {
+        _dataArray = [[NSMutableArray alloc] initWithCapacity:2];
+        [self.dataArray addObjectsFromArray:actions];
+        
+        CGFloat rowHeight = 40;
+        CGFloat tableHeight = self.tableView.rowHeight * actions.count;
+        CGFloat topPadding = 22;
+        CGRect frame = CGRectMake(0, topPadding, CGRectGetWidth(self.frame), tableHeight);
+        
+        self.tableView = [[UITableView alloc] initWithFrame:frame style:(UITableViewStyleGrouped)];
+        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), 0.01)];
+        self.tableView.backgroundColor = self.containerView.backgroundColor;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.tableView.showsHorizontalScrollIndicator = false;
+        self.tableView.showsVerticalScrollIndicator = false;
+        self.tableView.scrollEnabled = false;
+        self.tableView.sectionHeaderHeight = 0.01;
+        self.tableView.sectionFooterHeight = 0.01;
+        self.tableView.rowHeight = rowHeight;
+        
+        [self.containerView addSubview:self.tableView];
+        if (@available(iOS 11.0, *)) {
+            self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
+        
+        [self.tableView registerClass:JKActionSheetCell.class forCellReuseIdentifier:@"JKActionSheetCell"];
+        self.tableView.delegate = self;
+        self.tableView.dataSource = self;
+        
+        
+        self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(16, topPadding + tableHeight, CGRectGetWidth(self.frame), 40)];
+        self.cancelButton.backgroundColor = JKPhotoManager_Color(0xFF2D2D2D);
+        self.cancelButton.layer.cornerRadius = 20;
+        self.cancelButton.layer.masksToBounds = true;
+        [self.cancelButton setTitle:@"取消" forState:(UIControlStateNormal)];
+        [self.cancelButton setTitleColor:JKPhotoManager_Color(0xFFC3C5C8) forState:UIControlStateNormal];
+        self.cancelButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        [self.containerView addSubview:self.cancelButton];
+        [self.cancelButton addTarget:self action:@selector(dismissManually) forControlEvents:(UIControlEventTouchUpInside)];
+        
+        /// 顶部的浮标
+        self.buoyView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.frame) - 20, 10, 40, 4)];
+        self.buoyView.layer.cornerRadius = 2;
+        self.buoyView.backgroundColor = JKPhotoManager_Color(0xFF3F3F3F);
+        self.buoyView.layer.masksToBounds = true;
+        [self.containerView addSubview:self.buoyView];
+        
+        [self.buoyView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.mas_offset(0);
+            make.top.mas_offset(10);
+            make.width.mas_equalTo(40);
+            make.height.mas_equalTo(4);
+        }];
+        
+        [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.mas_offset(0);
+            make.top.mas_offset(topPadding);
+        }];
+        [self.cancelButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_offset(16);
+            make.right.mas_offset(-16);
+            make.top.equalTo(self.tableView.mas_bottom).offset(10);
+            make.bottom.mas_offset(-34);
+            make.height.mas_equalTo(40);
+        }];
+        self.containerHeight = self.tableView.rowHeight * actions.count + 10 + 40 + 34 + topPadding;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }
+    return self;
 }
 
 
-- (void)showInView:(UIView *)view actionHandle:(nullable JKActionSheetHandle)actionHandle {
+- (void)dismissManually {
+    self.cancelHandler ? self.cancelHandler() : NULL;
+    [self dismissAnimated:true];
+}
+
+
+
+#pragma mark - Public
+
+- (void)setTopCornerRadius:(CGFloat)topCornerRadius {
+    _topCornerRadius = topCornerRadius;
+    self.containerView.layer.cornerRadius = topCornerRadius;
+    self.containerView.layer.masksToBounds = true;
+}
+
+- (void)setContainerHeight:(CGFloat)containerHeight {
+    _containerHeight = containerHeight;
+    if (self.superview) {
+        [self refreshAnimated:true];
+    }
+}
+
+- (void)showInView:(UIView *)view animated:(BOOL)animated {
+    self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
+    self.containerView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), self.containerHeight);
+    self.safeAreaView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), 40);
     [view addSubview:self];
-    [view addSubview:self.backgroundButton];
-    
-    self.actionHandle = actionHandle;
-    self.backgroundButton.userInteractionEnabled = NO;
-    
-    CGFloat viewHeight = CGRectGetHeight(self.contentView.frame);
-    CGRect viewFrame = CGRectMake(0, JKPhotoManager_MainScreenSize().height - viewHeight, JKPhotoManager_MainScreenSize().width, viewHeight);
-    
-    
-    [UIView animateWithDuration:0.18 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        self.backgroundButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
-        self.contentView.frame = viewFrame;
-        
-    } completion:^(BOOL finished) {
-        self.backgroundButton.userInteractionEnabled = YES;
-    }];
+    [self refreshAnimated:animated];
 }
 
-- (void)reloadWithOtherButtonTitles:(NSArray<NSString *> *)otherButtonTitles {
-    NSMutableArray * mutArray = [NSMutableArray array];
-    if (otherButtonTitles && otherButtonTitles.count) {
-        [mutArray addObjectsFromArray:otherButtonTitles];
+
+- (void)refreshAnimated:(BOOL)animated {
+    dispatch_block_t block = ^{
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
+        self.containerView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - self.containerHeight,
+                                              CGRectGetWidth(self.frame), self.containerHeight);
+        self.safeAreaView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - 40,
+                                             CGRectGetWidth(self.frame), 40);
+    };
+    
+    if (animated) {
+        [UIView animateWithDuration:0.28 delay:0 options:7<<16 animations:block completion:nil];
+    } else {
+        block();
     }
+}
+
+- (void)dismissAnimated:(BOOL)animated {
+    dispatch_block_t block = ^{
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
+        self.containerView.frame = CGRectMake(0, CGRectGetHeight(self.frame),
+                                              CGRectGetWidth(self.frame), self.containerHeight);
+        self.safeAreaView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), 40);
+    };
     
-    if (self.destructiveButtonTitle) {
-        [mutArray addObject:self.destructiveButtonTitle];
+    if (animated) {
+        [UIView animateWithDuration:0.28 delay:0 options:7<<16 animations:block completion:^(BOOL finished) {
+            [self removeFromSuperview];
+        }];
+    } else {
+        block();
+        [self removeFromSuperview];
     }
-
-    NSMutableArray * buttonTitles = [NSMutableArray arrayWithArray:self.buttonTitles];
-    [buttonTitles replaceObjectAtIndex:0 withObject:mutArray.copy];
-    self.buttonTitles = buttonTitles.copy;
-    
-    CGFloat tableViewHeight = [self buttonCount] * JKActionSheetTableViewRowHeight + (self.buttonTitles.count == 2 ? 10 : 0);;
-    
-    CGFloat viewHeight = tableViewHeight + (JKPhotoManager_iPhoneX() ? 34 : 0);
-    CGRect viewFrame = CGRectMake(0, JKPhotoManager_MainScreenSize().height - viewHeight, JKPhotoManager_MainScreenSize().width, viewHeight);
-    
-    
-    self.tableView.frame = CGRectMake(0, 0, JKPhotoManager_MainScreenSize().width, tableViewHeight);
-    self.contentView.frame = viewFrame;
-    [self.tableView reloadData];
+    self.cancelHandler = nil;
 }
 
-#pragma mark - TableViewProtocol
-
-
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.buttonTitles.count;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.dataArray.count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return JKActionSheetTableViewRowHeight;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSArray * array = [self.buttonTitles objectAtIndex:section];
-    return array.count;
-}
-
-
-NSString * const JKActionSheetCellKey = @"JKActionSheetCellKey";
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    JKActionSheetCell * cell = [tableView dequeueReusableCellWithIdentifier:JKActionSheetCellKey];
-    if (!cell) {
-        cell = [[JKActionSheetCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:JKActionSheetCellKey];
-    }
-    
-    NSArray * array = [self.buttonTitles objectAtIndex:indexPath.section];
-    NSString * title = [array objectAtIndex:indexPath.row];
-    JKActionSheetCellType cellType = JKActionSheetCellTypeDefault;
-    if (self.destructiveButtonTitle && [title isEqualToString:self.destructiveButtonTitle]) {
-        cellType = JKActionSheetCellTypeDestructive;
-    }
-    [cell configureCellWithTitle:title type:cellType];
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    JKActionSheetCell * cell = [tableView dequeueReusableCellWithIdentifier:@"JKActionSheetCell"];
+    cell.titleLabel.text = self.dataArray[indexPath.row].title;
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section) {
-        return 10.0;
-    }return 0.01;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (section) {
-        UITableViewHeaderFooterView * headerView = [[UITableViewHeaderFooterView alloc] initWithFrame:CGRectMake(0, 0, JKPhotoManager_MainScreenSize().width, [self tableView:tableView heightForHeaderInSection:section])];
-        headerView.contentView.backgroundColor = [UIColor lightGrayColor];
-        return headerView;
-    }return nil;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    [cell setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-    [cell setLayoutMargins:UIEdgeInsetsMake(0, 0, 0, 0)];
-    [cell setPreservesSuperviewLayoutMargins:NO];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString * buttonTitle = nil;
-    NSUInteger buttonIndex = self.cancelButtonIndex;
-    if (indexPath.section == 0) {
-        buttonTitle = [self.buttonTitles.firstObject objectAtIndex:indexPath.row];
-        buttonIndex = indexPath.row;
-    } else {
-        buttonTitle = self.cancelButtonTitle;
-    }
-
-    [self dismissActionSheetAnimated];
-    
-    if (self.actionHandle) {
-        self.actionHandle(self, buttonIndex, buttonTitle);
-        self.actionHandle = nil;
-    }
-}
-
-
-#pragma mark - action
-
-- (void)dismissActionSheetAnimated {
-    CGRect frame = self.contentView.frame;
-    frame.origin.y = JKPhotoManager_MainScreenSize().height;
-    
-    [UIView animateWithDuration:0.18 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        self.backgroundButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
-        self.contentView.frame = frame;
-        
-    } completion:^(BOOL finished) {
-        if (finished) {
-            [self.backgroundButton removeFromSuperview];
-            [self removeFromSuperview];
-        }
-    }];
-}
-
-
-- (void)didClickedBackgroundButton:(UIButton *)button {
-    [self dismissActionSheetAnimated];
-}
-
-
-#pragma mark - 拓展
-
-//- (UIView *)statusBarContentView {
-//    return [[[UIApplication sharedApplication] valueForKey:@"statusBar"] superview];
-//}
-
-- (void)setFrame:(CGRect)frame {
-    [super setFrame:CGRectZero];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:false];
+    JKAction * action = self.dataArray[indexPath.row];
+    action.selectionHandler ? action.selectionHandler(action) : NULL;
+    [self dismissAnimated:true];
 }
 
 

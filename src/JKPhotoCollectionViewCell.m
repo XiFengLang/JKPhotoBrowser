@@ -174,10 +174,10 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     /// 被点击的图片有放大效果
     if (isTheImageBeTouched && model.imageView && model.imageView.superview) {
         // 可能会出现某些控制器的控件算出的相对frame的Y坐标小20
-        CGRect newImageViewFrame = [model.imageView.superview convertRect:model.imageView.frame toView:JKPhotoBrowser().jk_keyWindow];
+        CGRect newImageViewFrame = [model.imageView.superview convertRect:model.imageView.frame toView:JKPhotoManager_KeyWindow()];
         self.imageView.frame = newImageViewFrame;
         
-        [UIView animateWithDuration:0.20 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        [UIView animateWithDuration:0.4 delay:0 options:7<<16 animations:^{
             self.imageView.frame = [UIScreen mainScreen].bounds;
         } completion:nil];
     } else {
@@ -206,13 +206,6 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
         self.displayLink = nil;
     }
 }
-
-- (void)makeContentViewTransparentWithAlpha:(CGFloat)alpha {
-    if ([self.delegate respondsToSelector:@selector(jk_makeContentViewTransparentWithAlpha:)]) {
-        [self.delegate jk_makeContentViewTransparentWithAlpha:alpha];
-    }
-}
-
 
 
 - (void)handleDispalyLinkAction:(CADisplayLink *)displayLink {
@@ -244,13 +237,12 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
             CGFloat scale = 1 - (verticalMargin / height) * 0.5;
             self.scrollView.zoomScale = scale;
             scale = 1 - verticalMargin / height;
-            
-            [self makeContentViewTransparentWithAlpha:scale];
+            JKPhotoBrowser().jk_contentView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:scale];
             
         } else  {
             /// 向上，保持1.0比例
             self.scrollView.zoomScale = 1.0;
-            [self makeContentViewTransparentWithAlpha:1.0];
+            JKPhotoBrowser().jk_contentView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:1.0];
         }
         
         /// 无论向上、向下都进行位移
@@ -307,7 +299,7 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
             if (self.isPanGestureDirectionDown == NO) {
                 [UIView animateWithDuration:0.25 animations:^{
                     self.scrollView.zoomScale = 1.0;
-                    [self makeContentViewTransparentWithAlpha:1.0];
+                    JKPhotoBrowser().jk_contentView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:1.0];
                     self.imageView.center = self.imageViewOriginalCenter;
                 }];
             } else {
@@ -350,7 +342,13 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     if (self.scrollView.zoomScale > 1.0) {
         [self.scrollView setZoomScale:1.0 animated:YES];
     }
-    CGSize imageSize = self.imageView.image.size;
+    // self.imageView.image可能为nil，导致崩溃
+    // FIXME: Terminating app due to uncaught exception 'CALayerInvalidGeometry', reason: 'CALayer position contains NaN: [211.5 nan].
+    CGSize imageSize = self.imageView.image ? self.imageView.image.size : CGSizeZero;
+    if (self.imageView.image == nil || CGSizeEqualToSize(imageSize, CGSizeZero)) {
+        CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;
+        imageSize = CGSizeMake(screenWidth, screenWidth);
+    }
     
     /// 根据图片的比例调整ImageView的frame,不然动画可能会比较突兀
     /// 左右留空
@@ -394,7 +392,8 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
         } else {
             imageView.alpha = 0.1;
         }
-        [self makeContentViewTransparentWithAlpha:0];
+        JKPhotoBrowser().jk_contentView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0];
+        
         
     } completion:^(BOOL finished) {
         if (visible == false) {

@@ -7,46 +7,28 @@
 //
 
 #import "JKActionSheetCell.h"
-
-const CGFloat JKActionSheetTableViewRowHeight = 46;
-
-@interface JKActionSheetCell ()
-
-@property (nonatomic, strong) UIVisualEffectView * visulEffectView;
-
-@end
-
+#import <Masonry/Masonry.h>
 
 @implementation JKActionSheetCell
 
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.contentView.backgroundColor = [UIColor clearColor];
-        self.backgroundColor = [UIColor clearColor];
+        self.contentView.backgroundColor = JKPhotoManager_Color(0xFF1A1A1A);
         
-        self.jk_titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, JKPhotoManager_MainScreenSize().width, JKActionSheetTableViewRowHeight)];
-        self.jk_titleLabel.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];
-        self.jk_titleLabel.textAlignment = NSTextAlignmentCenter;
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, JKPhotoManager_ScreenWidth(), 40)];
+        self.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:JKPhotoManager_AdaptiveW(15)];
+        self.titleLabel.textColor = JKPhotoManager_Color(0xFFC3C5C8);
+        self.titleLabel.backgroundColor = UIColor.clearColor;
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [self.contentView addSubview:self.titleLabel];
         
-        UIBlurEffect * visualEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        self.visulEffectView = [[UIVisualEffectView alloc] initWithEffect:visualEffect];
-        self.visulEffectView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
-        self.visulEffectView.frame = self.jk_titleLabel.frame;
-        [self.contentView addSubview:self.visulEffectView];
-        [self.visulEffectView.contentView addSubview:self.jk_titleLabel];
-        
-        
-        self.selectedBackgroundView = [[UIView alloc] initWithFrame:self.jk_titleLabel.frame];
-        self.selectedBackgroundView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.75];
-        
-        
+        [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.mas_offset(0);
+            make.height.mas_equalTo(20);
+            make.right.left.mas_offset(0);
+        }];
     }return self;
-}
-
-- (void)configureCellWithTitle:(NSString *)title type:(JKActionSheetCellType)type {
-    self.jk_titleLabel.text = title;
-    self.jk_titleLabel.textColor = type == JKActionSheetCellTypeDestructive ? [UIColor redColor] : [UIColor blackColor];
-    self.jk_titleLabel.font = [UIFont systemFontOfSize:18];
 }
 
 

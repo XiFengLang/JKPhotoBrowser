@@ -24,16 +24,6 @@
  */
 - (void)jk_hidesPageControlIfNeed;
 
-
-
-/**
- 让容器View渐变透明
-
- @param alpha 透明度
- */
-- (void)jk_makeContentViewTransparentWithAlpha:(CGFloat)alpha;
-
-
 /**
  *  长按图片的代理
  *
