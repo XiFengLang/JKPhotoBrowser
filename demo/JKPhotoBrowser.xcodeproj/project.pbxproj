@@ -127,13 +127,13 @@
 		46279F04258075DE00787769 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				46279F0E258075DE00787769 /* JKPhotoBrowser.h */,
 				46279F0A258075DE00787769 /* JKActionSheet.h */,
 				46279F10258075DE00787769 /* JKActionSheet.m */,
 				46279F07258075DE00787769 /* JKActionSheetCell.h */,
 				46279F0C258075DE00787769 /* JKActionSheetCell.m */,
 				46279F05258075DE00787769 /* JKPhoneBrowserFunction.h */,
 				46279F0F258075DE00787769 /* JKPhoneBrowserFunction.m */,
-				46279F0E258075DE00787769 /* JKPhotoBrowser.h */,
 				46279F08258075DE00787769 /* JKPhotoCollectionViewCell.h */,
 				46279F0B258075DE00787769 /* JKPhotoCollectionViewCell.m */,
 				46279F09258075DE00787769 /* JKPhotoManager.h */,
@@ -280,6 +280,7 @@
 				9F9982EA1E51C3EE003796A0 /* Sources */,
 				9F9982EB1E51C3EE003796A0 /* Frameworks */,
 				9F9982EC1E51C3EE003796A0 /* Resources */,
+				4688436439466D59353BE34F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -296,7 +297,7 @@
 		9F9982E61E51C3EE003796A0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1230;
 				ORGANIZATIONNAME = "溪枫狼";
 				TargetAttributes = {
 					9F9982ED1E51C3EE003796A0 = {
@@ -349,6 +350,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4688436439466D59353BE34F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-JKPhotoBrowser/Pods-JKPhotoBrowser-frameworks.sh",
+				"${PODS_ROOT}/LookinServer/LookinServer.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LookinServer.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JKPhotoBrowser/Pods-JKPhotoBrowser-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D19368D080A579F55EBD8E48 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -444,6 +463,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -468,7 +488,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -501,6 +521,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -519,7 +540,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -534,7 +555,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = Y7H6F7S5DJ;
 				INFOPLIST_FILE = JKPhotoBrowser/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xifenglang.JKPhotoBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -548,7 +569,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = Y7H6F7S5DJ;
 				INFOPLIST_FILE = JKPhotoBrowser/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xifenglang.JKPhotoBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";

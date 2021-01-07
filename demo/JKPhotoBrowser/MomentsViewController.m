@@ -47,7 +47,7 @@ NSString * const JKMomentsCellKey = @"JKMomentsCellKey";
 - (MomentsTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     MomentsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:JKMomentsCellKey];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cell configueCellWithImageModels:self.dataArray tableView:tableView];
+    [cell configueCellWithImageModels:self.dataArray tableView:tableView atIndexPath:indexPath];
 
     return cell;
 }

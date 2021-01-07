@@ -29,13 +29,13 @@
     [super viewDidLoad];
     
     
-//    NSLog(@"%@",[UIApplication sharedApplication].jk_declaredInstanceVariables);
+    //    NSLog(@"%@",[UIApplication sharedApplication].jk_declaredInstanceVariables);
     
     CGFloat margin = 10.0f;
     CGFloat width = (CGRectGetWidth(UIScreen.mainScreen.bounds) - 40) / 3.0 ;
     
-//    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    //    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    //    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     
     
     NSMutableArray * mutArray = [NSMutableArray array];
@@ -64,8 +64,9 @@
         [imageView addGestureRecognizer:tap];
         
         JKPhotoModel * model = [JKPhotoModel modelWithImageView:imageView
+                                                      imageSize:image.size
                                                     smallPicUrl:imageName
-                                                           cell:nil
+                                                      indexPath:nil
                                                     contentView:self.view];
         [mutArray addObject:model];
     }
@@ -79,7 +80,7 @@
     JKPhotoBrowser().jk_itemArray = self.imageModels;
     JKPhotoBrowser().jk_currentIndex = imageView.tag - 1;
     JKPhotoBrowser().jk_showPageController = YES;
-//    JKPhotoBrowser().jk_hidesOriginalImageView = YES;
+    //    JKPhotoBrowser().jk_hidesOriginalImageView = YES;
     [[JKPhotoManager sharedManager] jk_showPhotoBrowser];
     JKPhotoBrowser().jk_delegate = self;
     JKPhotoBrowser().jk_QRCodeRecognizerEnable = YES;

@@ -11,7 +11,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SDWebImage/UIView+WebCache.h>
 
- 
+
 NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
 
 @interface JKPhotoCollectionViewCell ()<UIScrollViewDelegate, UIGestureRecognizerDelegate>
@@ -152,6 +152,8 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
             placeholderImage:(UIImage *)placeholderImage
          isTheImageBeTouched:(BOOL)isTheImageBeTouched {
     
+    _model = model;
+    
     self.collectionView = collectionView;
     
     if (imageUrl && [self isValidURLString:imageUrl]) {
@@ -164,10 +166,13 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     } else {
         self.imageView.image = model.imageView.image ? : placeholderImage;
     }
-    _model = model;
     
-    /// 设置内容填充方式
+    self.scrollView.contentSize = [UIScreen mainScreen].bounds.size;
+    
+    /// 设置内容填充方式(因为不知道图片的宽高，所以不适用之前图片的contentMode)
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.imageView.layer.cornerRadius = 0;
+    self.imageView.layer.masksToBounds = NO;
     self.imageView.clipsToBounds = NO;
     
     
@@ -177,14 +182,12 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
         CGRect newImageViewFrame = [model.imageView.superview convertRect:model.imageView.frame toView:JKPhotoManager_KeyWindow()];
         self.imageView.frame = newImageViewFrame;
         
-        [UIView animateWithDuration:0.4 delay:0 options:7<<16 animations:^{
+        [UIView animateWithDuration:0.5 delay:0 options:7<<16 animations:^{
             self.imageView.frame = [UIScreen mainScreen].bounds;
         } completion:nil];
     } else {
         self.imageView.frame = [UIScreen mainScreen].bounds;
     }
-    
-    self.scrollView.contentSize = [UIScreen mainScreen].bounds.size;
     
     
     /// 保存原始frame的中心坐标
@@ -314,29 +317,37 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
 
 - (void)handleSingleTapGesture:(UITapGestureRecognizer *)tap{
     UIImageView * imageView = self.imageView;
-    BOOL visible = NO;
+    __block BOOL visible = NO;
+    UIWindow * keyWindow = JKPhotoManager_KeyWindow();
     
     CGRect newImageViewFrame = CGRectZero;
     if (self.model.imageView && self.model.imageView.superview) {
-        if ([self.model.contentView isKindOfClass:[UITableView class]] && self.model.cell) {
+        newImageViewFrame = [self.model.imageView.superview convertRect:self.model.imageView.frame toView:keyWindow];
+        
+        if ([self.model.contentView isKindOfClass:[UITableView class]] && self.model.indexPath) {
             UITableView * tableView = (UITableView *)self.model.contentView;
-            UITableViewCell * cell = (UITableViewCell *)self.model.cell;
-            
-            /// (对于聊天界面,Cell的复用会导致ImageView的复用，动画效果会有些偏差)
-            visible = [tableView.visibleCells containsObject:cell];
-        } else if ([self.model.contentView isKindOfClass:[UICollectionView class]] && self.model.cell){
+            [tableView.indexPathsForVisibleRows enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (self.model.indexPath.row == obj.row &&
+                    self.model.indexPath.section == obj.section) {
+                    visible = true;
+                    *stop = true;
+                }
+            }];
+        } else if ([self.model.contentView isKindOfClass:[UICollectionView class]] && self.model.indexPath){
             UICollectionView * colletionView = (UICollectionView *)self.model.contentView;
-            UICollectionViewCell * cell = (UICollectionViewCell *)self.model.cell;
-            
-            /// (对于聊天界面,Cell的复用会导致ImageView的复用，动画效果会有些偏差)
-            visible = [colletionView.visibleCells containsObject:cell];
+            [colletionView.indexPathsForVisibleItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (self.model.indexPath.row == obj.row &&
+                    self.model.indexPath.section == obj.section) {
+                    visible = true;
+                    *stop = true;
+                }
+            }];
         } else {
-            newImageViewFrame = [self.model.imageView.superview convertRect:self.model.imageView.frame toView:JKPhotoBrowser().jk_keyWindow];
-            visible = CGRectContainsRect(JKPhotoBrowser().jk_keyWindow.frame, newImageViewFrame);
+            visible = CGRectContainsRect(keyWindow.frame, newImageViewFrame);
         }
     } else {
-        newImageViewFrame = [self.imageView.superview convertRect:self.imageView.frame toView:JKPhotoBrowser().jk_keyWindow];
-        visible = false;
+        newImageViewFrame = self.model.imageView.frame;
+        visible = CGRectContainsRect(keyWindow.frame, newImageViewFrame);
     }
     
     if (self.scrollView.zoomScale > 1.0) {
@@ -372,7 +383,7 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     
     // 可能会出现某些控制器的控件算出的相对frame的Y坐标小20
     if (CGRectEqualToRect(newImageViewFrame, CGRectZero)) {
-        newImageViewFrame = [self.model.imageView.superview convertRect:self.model.imageView.frame toView:JKPhotoBrowser().jk_keyWindow];
+        newImageViewFrame = [self.model.imageView.superview convertRect:self.model.imageView.frame toView:keyWindow];
     }
     
     /// 隐藏PageControl
@@ -383,16 +394,19 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
     if (self.model.imageView) {
         self.imageView.contentMode = self.model.imageView.contentMode;
         self.imageView.clipsToBounds = self.model.imageView.clipsToBounds;
+        self.imageView.layer.cornerRadius = 0;
+        self.imageView.layer.masksToBounds = self.model.imageView.layer.masksToBounds;
     }
     
     /// 退出动画 (对于聊天界面,Cell的复用会导致ImageView的复用，动画效果会有些偏差)
-    [UIView animateWithDuration:0.18 delay:0.05 options:UIViewAnimationOptionCurveEaseOut animations:^{
+    [UIView animateWithDuration:0.38 delay:0.1 options:7<<16 animations:^{
         if (visible) {
             imageView.frame = newImageViewFrame;
         } else {
             imageView.alpha = 0.1;
         }
-        JKPhotoBrowser().jk_contentView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0];
+        self.imageView.layer.cornerRadius = self.model.imageView.layer.cornerRadius;
+        JKPhotoBrowser().jk_contentView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0.f];
         
         
     } completion:^(BOOL finished) {
@@ -401,13 +415,11 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
         }
         if (self.model.imageView) self.model.imageView.hidden = NO;
         
-        if (finished) {
-            if ([self.delegate respondsToSelector:@selector(jk_didClickedImageView:visible:completion:)]) {
-                [self.delegate jk_didClickedImageView:self.imageView visible:visible completion:^{
-                    imageView.alpha = 1.0;
-                    imageView.hidden = NO;
-                }];
-            }
+        if ([self.delegate respondsToSelector:@selector(jk_didClickedImageView:visible:completion:)]) {
+            [self.delegate jk_didClickedImageView:self.imageView visible:visible completion:^{
+                imageView.alpha = 1.0;
+                imageView.hidden = NO;
+            }];
         }
     }];
 }

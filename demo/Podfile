@@ -1,7 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
-platform :ios, '8.0'
+platform :ios, '9.0'
 source 'https://github.com/CocoaPods/Specs.git'
 source 'https://cdn.cocoapods.org/'
 
@@ -11,7 +11,12 @@ target 'JKPhotoBrowser' do
 
   # Pods for JKPhotoBrowser
 
-#pod 'SDWebImage', '>= 5.0'
-pod 'JKImageBrowser', '~> 1.0.9'
+  # 1.1.0
+  pod 'Masonry'
+  # 5.9.4
+  pod 'SDWebImage'
+  
+  pod 'LookinServer', :configurations => ['Debug']
+  #pod 'JKImageBrowser', '~> 1.0.9'
 
 end

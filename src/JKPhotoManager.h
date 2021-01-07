@@ -13,23 +13,29 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-
+@class JKPhotoManager;
 @protocol JKPhotoManagerDelegate <NSObject>
 @optional
 
 /// 返回占位图，一般是原来的小图
-- (UIImage *)jk_placeholderImageAtIndex:(NSInteger) index;
+- (UIImage *)jk_placeholderImageAtIndex:(NSInteger)index;
 
 /// 返回大图URL
-- (NSString *)jk_bigImageUrlAtIndex:(NSInteger) index;
+- (NSString *)jk_bigImageUrlAtIndex:(NSInteger)index;
 
 /// 将图片保存到相册的结果回调
 /// @param error error description
-- (void)jk_handleImageWriteToSavedPhotosAlbumWithError:(NSError * _Nullable) error;
+- (void)jk_handleImageWriteToSavedPhotosAlbumWithError:(NSError * _Nullable)error;
 
 ///  处理二维码识别
 /// @param QRCodeContent 二维码内容
 - (void)jk_handleQRCodeRecognitionResult:(NSString *)QRCodeContent;
+
+/// 展示图片浏览器(更改状态栏)
+- (void)jk_phoneBrowserDidAppear;
+
+/// 关闭图片浏览器(更改状态栏)
+- (void)jk_phoneBrowserDidDisappear;
 
 @end
 
@@ -75,8 +81,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 是否需要识别二维码，默认YES
 @property (nonatomic, assign) BOOL jk_QRCodeRecognizerEnable;
 
-/// 取当前的keyWindow
-@property (nonatomic, strong, readonly) UIWindow * jk_keyWindow;
 
 /// 底层的CollectionView是否正在滚动，如果正在滚动，说明已经响应了拖拽手势并且发生了被动偏移，此时
 /// JKPhotoCollectionViewCell中的panGesture 不响应手势

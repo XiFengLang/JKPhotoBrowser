@@ -11,6 +11,6 @@
 
 @interface MomentsTableViewCell : UITableViewCell
 
-- (void)configueCellWithImageModels:(NSArray <JKImageModel *> *)models tableView:(UITableView *)tableView;
+- (void)configueCellWithImageModels:(NSArray <JKImageModel *> *)models tableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
 
 @end

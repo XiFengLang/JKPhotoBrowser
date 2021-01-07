@@ -37,8 +37,9 @@
     [self.dataArray enumerateObjectsUsingBlock:^(JKImageModel * _Nonnull model, NSUInteger idx, BOOL * _Nonnull stop) {
         
         JKPhotoModel * photoModel = [JKPhotoModel modelWithImageView:nil
+                                                           imageSize:model.imageSize.CGSizeValue
                                                          smallPicUrl:model.imageUrl
-                                                                cell:nil
+                                                           indexPath:nil
                                                          contentView:self.tableView];
         [self.imageModels addObject:photoModel];
     }];
@@ -73,7 +74,7 @@ NSString * const JKChatCellKey = @"JKChatCellKey";
     
     JKPhotoModel * photoModel = self.imageModels[indexPath.row];
     photoModel.imageView = cell.imgView;
-    photoModel.cell = cell;
+    photoModel.indexPath = indexPath;
     
     return cell;
 }

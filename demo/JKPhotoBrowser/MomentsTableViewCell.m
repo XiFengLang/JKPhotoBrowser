@@ -38,6 +38,7 @@
             UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(x, y, width, width)];
             imageView.contentMode = UIViewContentModeScaleAspectFill;
             imageView.clipsToBounds = YES;
+            imageView.layer.cornerRadius = 5;
             imageView.backgroundColor = [UIColor redColor];
             imageView.tag = index;
             imageView.hidden = YES;
@@ -52,7 +53,7 @@
     }return self;
 }
 
-- (void)configueCellWithImageModels:(NSArray <JKImageModel *> *)models tableView:(UITableView *)tableView {
+- (void)configueCellWithImageModels:(NSArray <JKImageModel *> *)models tableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
     
     self.models = models;
     [self.imageModels removeAllObjects];
@@ -62,8 +63,9 @@
         imageView.hidden = NO;/// 根据图片数量去控制imageView的隐藏，我这全是9张，所以都显示
         
         JKPhotoModel * photoModel = [JKPhotoModel modelWithImageView:imageView
+                                                           imageSize:model.imageSize.CGSizeValue
                                                          smallPicUrl:model.imageUrl
-                                                                cell:self
+                                                           indexPath:indexPath
                                                          contentView:tableView];
         [self.imageModels addObject:photoModel];
         
