@@ -161,6 +161,7 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:placeholderImage];
         
     } else if (model.smallPicurl && [self isValidURLString:model.smallPicurl]) {
+        self.imageView.sd_imageIndicator = [SDWebImageActivityIndicator whiteIndicator];
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:model.smallPicurl] placeholderImage:placeholderImage];
         
     } else {
