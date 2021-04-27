@@ -1208,7 +1208,30 @@
 			};
 			name = Release;
 		};
-		5DE630FB78E4B3B3EC9E52F3827315E4 /* Debug */ = {
+		6B35E8482A7E09B435AFCE486B003D5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DE08825BD6A0A899133DC7AD0C315510 /* SDWebImage.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/SDWebImage/SDWebImage-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = SDWebImage;
+				PRODUCT_NAME = SDWebImage;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8D8083A979AA81D1EB9B2D067369D144 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1609D6D542E9E5A064324AF224FEB2E9 /* SDWebImage.debug.xcconfig */;
 			buildSettings = {
@@ -1216,7 +1239,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				GCC_PREFIX_HEADER = "Target Support Files/SDWebImage/SDWebImage-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
@@ -1305,29 +1328,6 @@
 			};
 			name = Release;
 		};
-		D0E37D433D8D53B9D8041261A5CED1CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = DE08825BD6A0A899133DC7AD0C315510 /* SDWebImage.release.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/SDWebImage/SDWebImage-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = SDWebImage;
-				PRODUCT_NAME = SDWebImage;
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		D8C899CA45252633AEAF5126F35E0E85 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 35F59060F34EF5BE75D0B44FC23B06B1 /* Pods-JKPhotoBrowser.release.xcconfig */;
@@ -1382,8 +1382,8 @@
 		B1FA491365904802AD9D5BF4683066A6 /* Build configuration list for PBXNativeTarget "SDWebImage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5DE630FB78E4B3B3EC9E52F3827315E4 /* Debug */,
-				D0E37D433D8D53B9D8041261A5CED1CD /* Release */,
+				8D8083A979AA81D1EB9B2D067369D144 /* Debug */,
+				6B35E8482A7E09B435AFCE486B003D5E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

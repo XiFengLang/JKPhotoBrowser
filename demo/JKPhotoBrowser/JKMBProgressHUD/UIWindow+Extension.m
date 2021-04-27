@@ -2,7 +2,7 @@
 //  UIWindow+FCExtension.m
 //  JKTest
 //
-//  Created by 蒋鹏 on 16/11/24.
+//  Created by 蒋委员长 on 16/11/24.
 //  Copyright © 2016年 蒋鹏. All rights reserved.
 //
 

@@ -1,8 +1,8 @@
 //
 //  JKPhotoCollectionViewCell.h
-//  ZoomScrollView
+//  JKPhotoBrowser
 //
-//  Created by 蒋鹏 on 16/6/27.
+//  Created by 蒋委员长 on 16/6/27.
 //  Copyright © 2016年 溪枫狼. All rights reserved.
 //
 
@@ -15,19 +15,14 @@
  *
  *  @param visible   是否超出屏幕
  */
-- (void)jk_didClickedImageView:(UIImageView *)imageView visible:(BOOL)visible completion:(void(^)(void))completion;
+- (void)jk_pictureViewClicked:(UIImageView *)imageView visible:(BOOL)visible completion:(void(^)(void))completion;
 
 
 
-/**
- 退出的时候先隐藏pageControl
- */
+/// 退出的时候先隐藏pageControl
 - (void)jk_hidesPageControlIfNeed;
 
-/**
- *  长按图片的代理
- *
- */
+/// 长按图片的代理
 - (void)jk_didLongPressImageView:(UIImageView *)imageView;
 
 @end
@@ -39,25 +34,25 @@ UIKIT_EXTERN NSString * const JKPhotoCollectionViewCellKey;
 @interface JKPhotoCollectionViewCell : UICollectionViewCell
 
 
-/**    用于缩放图片    */
+/** 用于缩放图片
+ */
 @property (nonatomic, strong, readonly) UIScrollView * scrollView;
 
 
 
-/**
- 长按、点击等手势响应代理
+/** 长按、点击等手势响应代理
  */
 @property (nonatomic, weak) id<JKPhotoCollectionViewCellDelegate> delegate;
 
 
-/**
- 是否需要隐藏原始的imageView
+/** 是否需要隐藏原始的imageView
  */
 @property (nonatomic, assign) BOOL jk_hidesOriginalImageView;
 
 
 
-/**    刷新cell    */
+/** 刷新cell
+ */
 - (void)refreshCellWithModel:(JKPhotoModel *)model
               collectionView:(UICollectionView *)collectionView
                  bigImageUrl:(NSString *)imageUrl
@@ -66,15 +61,13 @@ UIKIT_EXTERN NSString * const JKPhotoCollectionViewCellKey;
 
 
 
-/**
- 隐藏原来的图片
+/** 隐藏原来的图片
  */
 - (void)collectionViewWillDisplayCell;
 
 
 
-/**
- 调整imageView的位置、缩放比例，移除displayLink
+/** 调整imageView的位置、缩放比例，移除displayLink
  */
 - (void)collectionViewDidEndDisplayCell;
 

@@ -1,8 +1,8 @@
 //
 //  JKPhotoCollectionViewCell.m
-//  ZoomScrollView
+//  JKPhotoBrowser
 //
-//  Created by 蒋鹏 on 16/6/27.
+//  Created by 蒋委员长 on 16/6/27.
 //  Copyright © 2016年 溪枫狼. All rights reserved.
 //
 
@@ -416,8 +416,8 @@ NSString * const JKPhotoCollectionViewCellKey = @"JKPhotoCollectionViewCell";
         }
         if (self.model.imageView) self.model.imageView.hidden = NO;
         
-        if ([self.delegate respondsToSelector:@selector(jk_didClickedImageView:visible:completion:)]) {
-            [self.delegate jk_didClickedImageView:self.imageView visible:visible completion:^{
+        if ([self.delegate respondsToSelector:@selector(jk_pictureViewClicked:visible:completion:)]) {
+            [self.delegate jk_pictureViewClicked:self.imageView visible:visible completion:^{
                 imageView.alpha = 1.0;
                 imageView.hidden = NO;
             }];

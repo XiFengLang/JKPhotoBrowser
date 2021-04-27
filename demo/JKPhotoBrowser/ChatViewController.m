@@ -2,7 +2,7 @@
 //  ChatViewController.m
 //  JKPhotoBrowser
 //
-//  Created by 蒋鹏 on 17/2/20.
+//  Created by 蒋委员长 on 17/2/20.
 //  Copyright © 2017年 溪枫狼. All rights reserved.
 //
 
@@ -10,6 +10,10 @@
 #import "JKImageModel.h"
 #import "ChatTableViewCell.h"
 #import "JKPhotoBrowser.h"
+#import "JKSystemPageControl.h"
+#import "JKNumberPageControl.h"
+
+
 
 @interface ChatViewController () <UITableViewDelegate, UITableViewDataSource, ChatTableViewCellDelegate, JKPhotoManagerDelegate>
 
@@ -36,10 +40,11 @@
     
     [self.dataArray enumerateObjectsUsingBlock:^(JKImageModel * _Nonnull model, NSUInteger idx, BOOL * _Nonnull stop) {
         
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
         JKPhotoModel * photoModel = [JKPhotoModel modelWithImageView:nil
                                                            imageSize:model.imageSize.CGSizeValue
                                                          smallPicUrl:model.imageUrl
-                                                           indexPath:nil
+                                                           indexPath:indexPath
                                                          contentView:self.tableView];
         [self.imageModels addObject:photoModel];
     }];
@@ -96,7 +101,14 @@ NSString * const JKChatCellKey = @"JKChatCellKey";
 - (void)didClickImageView:(UIImageView *)imageView atIndexPath:(NSIndexPath *)indexPath {
     JKPhotoBrowser().jk_itemArray = self.imageModels;
     JKPhotoBrowser().jk_currentIndex = indexPath.row;
-    JKPhotoBrowser().jk_showPageController = YES;
+    
+    JKNumberPageControl * pageIndicator = [[JKNumberPageControl alloc] init];
+    pageIndicator.currentPageIndicatorTintColor = UIColor.whiteColor;
+    pageIndicator.pageIndicatorTintColor = UIColor.darkGrayColor;
+    pageIndicator.hidesForSinglePage = false;
+    
+    JKPhotoBrowser().jk_pageControl = pageIndicator;
+    
     [[JKPhotoManager sharedManager] jk_showPhotoBrowser];
     JKPhotoBrowser().jk_delegate = self;
 }

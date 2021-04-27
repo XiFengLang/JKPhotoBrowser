@@ -2,7 +2,7 @@
 //  JKHUDManager.m
 //  E顿饭
 //
-//  Created by 蒋鹏 on 16/12/14.
+//  Created by 蒋委员长 on 16/12/14.
 //  Copyright © 2016年 溪枫狼. All rights reserved.
 //
 

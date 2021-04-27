@@ -1,9 +1,9 @@
 PODS:
   - LookinServer (1.0.0)
   - Masonry (1.1.0)
-  - SDWebImage (5.9.4):
-    - SDWebImage/Core (= 5.9.4)
-  - SDWebImage/Core (5.9.4)
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
 
 DEPENDENCIES:
   - LookinServer
@@ -19,8 +19,8 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   LookinServer: 0002891cd3cec5e082a910e897dfe71b4f06b89e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  SDWebImage: b69257f4ab14e9b6a2ef53e910fdf914d8f757c1
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
 PODFILE CHECKSUM: 494b673a4af60546b3efe1ebbc01aac66c675522
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

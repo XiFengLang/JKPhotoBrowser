@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "JKImageBrowser"
-  s.version      = "1.1.1"
+  s.version      = "1.2.0"
   s.summary      = "图片浏览控件"
   s.homepage     = "https://github.com/XiFengLang/JKPhotoBrowser"
 
@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   s.author       = { "XiFengLang" => "lang131jp@vip.qq.com" }
   s.source       = { :git => "https://github.com/XiFengLang/JKPhotoBrowser.git", :tag => "#{s.version}" }
 
-  s.platform     = :ios,"8.0"
+  s.platform     = :ios,"9.0"
   s.framework    = "UIKit"
   s.requires_arc = true
   s.source_files = "src/*.{h,m}"

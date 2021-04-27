@@ -1,8 +1,8 @@
 //
 //  JKPhotoManager.m
-//  ZoomScrollView
+//  JKPhotoBrowser
 //
-//  Created by 蒋鹏 on 16/6/27.
+//  Created by 蒋委员长 on 16/6/27.
 //  Copyright © 2016年 溪枫狼. All rights reserved.
 //
 
@@ -22,8 +22,6 @@ JKPhotoCollectionViewCellDelegate>
 @property (nonatomic, assign)BOOL isFirstTimeZoomImage;
 
 
-@property (nonatomic, strong)UIPageControl * pageController;
-
 @end
 
 @implementation JKPhotoManager
@@ -38,27 +36,27 @@ JKPhotoCollectionViewCellDelegate>
 }
 
 
-- (void)initPageController{
-    BOOL isIPhoneX = JKPhotoManager_iPhoneX();
-    
-    _pageController = [[UIPageControl alloc]init];
-    _pageController.numberOfPages = 1;
-    _pageController.hidesForSinglePage = YES;
-    _pageController.frame = CGRectMake(0, JKPhotoManager_ScreenHeight() - (isIPhoneX ? 76 : 40), JKPhotoManager_ScreenWidth(), 40);
-    _pageController.backgroundColor = [UIColor clearColor];
-    _pageController.pageIndicatorTintColor = [UIColor darkGrayColor];
-    _pageController.currentPageIndicatorTintColor = [UIColor whiteColor];
-    _pageController.userInteractionEnabled = YES;
-    _pageController.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-    if (@available(iOS 14.0, *)) {
-        _pageController.backgroundStyle = UIPageControlBackgroundStyleProminent;
+- (void)setJk_pageControl:(JKPageControl *)jk_pageControl {
+    if (jk_pageControl == nil) {
+        [_jk_pageControl removeFromSuperview];
     }
-    [_pageController addTarget:self action:@selector(handlePageControlTapAction) forControlEvents:UIControlEventTouchUpInside];
+    _jk_pageControl = jk_pageControl;
+    
+    if (jk_pageControl == nil) {
+        return;
+    }
+    
+    BOOL isIPhoneX = JKPhotoManager_iPhoneX();
+    CGFloat YAxis = JKPhotoManager_ScreenHeight() - (isIPhoneX ? 76 : 40);
+    
+    jk_pageControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+    jk_pageControl.frame = CGRectMake(0, YAxis, JKPhotoManager_ScreenWidth(), 40);
+    [jk_pageControl addTarget:self action:@selector(handlePageControlTapAction) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)handlePageControlTapAction {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:self.pageController.currentPage inSection:0];
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:self.jk_pageControl.currentPage inSection:0];
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:true];
     });
 }
@@ -87,12 +85,9 @@ JKPhotoCollectionViewCellDelegate>
         self.collectionView.maximumZoomScale= 3.0;
         self.collectionView.pagingEnabled = YES;
         
-        [self initPageController];
-        
         self.collectionView.dataSource = self;
         self.collectionView.delegate = self;
         self.isFirstTimeZoomImage = YES;
-        self.jk_showPageController = NO;
     }return self;
 }
 
@@ -122,34 +117,34 @@ JKPhotoCollectionViewCellDelegate>
     [self.jk_contentView addSubview:self.collectionView];
     
     UIPageControl * pageController = nil;
-    if (self.jk_showPageController) {
-        [self.jk_contentView addSubview:self.pageController];
+    if (self.jk_pageControl != nil) {
+        [self.jk_contentView addSubview:self.jk_pageControl];
         
-        self.pageController.numberOfPages = self.jk_itemArray.count;
-        self.pageController.currentPage = self.jk_currentIndex;
-        self.pageController.hidden = NO;
-        pageController = self.pageController;
-        
-    } else if (nil != _pageController) {
-        [self.pageController removeFromSuperview];
-        self.pageController = nil;
+        self.jk_pageControl.numberOfPages = self.jk_itemArray.count;
+        self.jk_pageControl.currentPage = self.jk_currentIndex;
     }
     
-    self.jk_contentView.userInteractionEnabled = YES;
+    self.jk_contentView.userInteractionEnabled = false;
     self.jk_contentView.autoresizesSubviews = NO;
     self.isFirstTimeZoomImage = YES;
     
     /// 根据index设置偏移
-//    [self.collectionView reloadData];
+    //    [self.collectionView reloadData];
     
     [self.collectionView setContentOffset:CGPointMake(CGRectGetWidth(self.collectionView.frame) * self.jk_currentIndex, 0)];
     
     self.jk_contentView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0];
     pageController.alpha = 0.f;
-    [UIView animateWithDuration:0.5 delay:0 options:7<<16 animations:^{
+    [UIView animateWithDuration:0.5 delay:0 options:7<<16 | 1<<2 animations:^{
         self.jk_contentView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:1.f];
         pageController.alpha = 1.f;
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        self.jk_contentView.userInteractionEnabled = true;
+        
+        if ([self.jk_delegate respondsToSelector:@selector(jk_phoneBrowserDidAppear)]) {
+            [self.jk_delegate jk_phoneBrowserDidAppear];
+        }
+    }];
     
     _jk_isContentViewScrolling = NO;
 }
@@ -163,7 +158,7 @@ JKPhotoCollectionViewCellDelegate>
         self.jk_contentView.frame = tempFrame;
         
     } completion:^(BOOL finished) {
-        [self jk_didClickedImageView:nil visible:YES completion:^{
+        [self jk_pictureViewClicked:nil visible:YES completion:^{
             CGRect tempFrame = self.jk_contentView.frame;
             tempFrame.origin.x += tempFrame.size.width;
             self.jk_contentView.frame = tempFrame;
@@ -183,8 +178,8 @@ JKPhotoCollectionViewCellDelegate>
     float scale = contentOffsetX / scrollViewWidth;
     /// 将展示第n页
     self.jk_currentIndex = (NSInteger)(scale + 0.5);
-    if (self.jk_showPageController) {
-        self.pageController.currentPage = self.jk_currentIndex;
+    if (scrollView.isTracking || scrollView.isDragging) {
+        self.jk_pageControl.currentPage = self.jk_currentIndex;
     }
 }
 
@@ -257,16 +252,15 @@ JKPhotoCollectionViewCellDelegate>
 /**
  移除视图
  */
-- (void)jk_didClickedImageView:(UIImageView *)imageView visible:(BOOL)visible completion:(void (^)(void))completion {
+- (void)jk_pictureViewClicked:(UIImageView *)imageView visible:(BOOL)visible completion:(void (^)(void))completion {
     
     [UIView animateWithDuration:0.25 delay:0 options:7<<16 animations:^{
         self.jk_contentView.alpha = 0;
     } completion:^(BOOL finished) {
         self.jk_QRCodeRecognizerEnable = YES;
         self.jk_hidesOriginalImageView = YES;
-        if (self.jk_showPageController) {
-            [self.pageController removeFromSuperview];
-        }
+        
+        self.jk_pageControl = nil;
         
         [self.jk_contentView removeFromSuperview];
         self.jk_itemArray = NSArray.new;
@@ -274,14 +268,16 @@ JKPhotoCollectionViewCellDelegate>
         [self.collectionView removeFromSuperview];
         
         if (completion) completion();
+        
+        if ([self.jk_delegate respondsToSelector:@selector(jk_phoneBrowserDidDisappear)]) {
+            [self.jk_delegate jk_phoneBrowserDidDisappear];
+        }
     }];
 }
 
 
 - (void)jk_hidesPageControlIfNeed {
-    if (self.jk_showPageController) {
-        self.pageController.hidden = YES;
-    }
+    self.jk_pageControl = nil;
 }
 
 - (void)jk_didLongPressImageView:(UIImageView *)imageView{

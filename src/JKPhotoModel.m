@@ -1,8 +1,8 @@
 //
 //  JKPhotoModel.m
-//  ZoomScrollView
+//  JKPhotoBrowser
 //
-//  Created by 蒋鹏 on 16/6/27.
+//  Created by 蒋委员长 on 16/6/27.
 //  Copyright © 2016年 溪枫狼. All rights reserved.
 //
 

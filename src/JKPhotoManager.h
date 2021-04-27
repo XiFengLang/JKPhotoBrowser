@@ -1,14 +1,15 @@
 //
 //  JKPhotoManager.h
-//  ZoomScrollView
+//  JKPhotoBrowser
 //
-//  Created by 蒋鹏 on 16/6/27.
+//  Created by 蒋委员长 on 16/6/27.
 //  Copyright © 2016年 溪枫狼. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "JKPhotoModel.h"
 #import "JKPhoneBrowserFunction.h"
+#import "JKPageControl.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -75,8 +76,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 代理，返回占位图，一般是原来的小图
 @property (nonatomic, weak) id<JKPhotoManagerDelegate> jk_delegate;
 
-/// 展示pageController
-@property (nonatomic, assign) BOOL jk_showPageController;
+
+/// 分页指示器，默认nil , 不显示
+/// NOTE: 原属性'jk_showPageController'已废弃，请使用 'jk_pageControl'
+@property (nonatomic, strong, nullable) JKPageControl * jk_pageControl;
+
 
 /// 是否需要识别二维码，默认YES
 @property (nonatomic, assign) BOOL jk_QRCodeRecognizerEnable;
@@ -85,6 +89,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 底层的CollectionView是否正在滚动，如果正在滚动，说明已经响应了拖拽手势并且发生了被动偏移，此时
 /// JKPhotoCollectionViewCell中的panGesture 不响应手势
 @property (nonatomic, assign, readonly) BOOL jk_isContentViewScrolling;
+
 
 /// 是否需要隐藏原始的imageView，default is YES，如果隐藏，拖拽的时候会出现空白
 @property (nonatomic, assign) BOOL jk_hidesOriginalImageView;

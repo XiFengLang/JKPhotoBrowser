@@ -2,7 +2,7 @@
 //  ViewController.m
 //  JKPhotoBrowser
 //
-//  Created by 蒋鹏 on 17/2/13.
+//  Created by 蒋委员长 on 17/2/13.
 //  Copyright © 2017年 溪枫狼. All rights reserved.
 //
 
@@ -14,12 +14,15 @@
 #import "JKHUDManager.h"
 
 #import "JKPhotoBrowser.h"
+#import "JKSystemPageControl.h"
+#import "JKNumberPageControl.h"
 
 #import "JKViewController.h"
 
 @interface ViewController () <JKPhotoManagerDelegate>
 
 @property (nonatomic, copy) NSArray * imageModels;
+@property (nonatomic, assign) UIStatusBarStyle statusBarStyle;
 
 @end
 
@@ -27,7 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    _statusBarStyle = UIStatusBarStyleDefault;
     
     //    NSLog(@"%@",[UIApplication sharedApplication].jk_declaredInstanceVariables);
     
@@ -57,16 +60,15 @@
         [self.view addSubview:imageView];
         
         
-        
-        
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickedImageView:)];
         imageView.userInteractionEnabled = YES;
         [imageView addGestureRecognizer:tap];
         
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:index-1 inSection:0];
         JKPhotoModel * model = [JKPhotoModel modelWithImageView:imageView
                                                       imageSize:image.size
                                                     smallPicUrl:imageName
-                                                      indexPath:nil
+                                                      indexPath:indexPath
                                                     contentView:self.view];
         [mutArray addObject:model];
     }
@@ -79,13 +81,19 @@
     UIImageView * imageView = (UIImageView *)tap.view;
     JKPhotoBrowser().jk_itemArray = self.imageModels;
     JKPhotoBrowser().jk_currentIndex = imageView.tag - 1;
-    JKPhotoBrowser().jk_showPageController = YES;
+    
+    JKSystemPageControl * pageIndicator = [[JKSystemPageControl alloc] init];
+    pageIndicator.currentPageIndicatorTintColor = UIColor.whiteColor;
+    pageIndicator.pageIndicatorTintColor = UIColor.darkGrayColor;
+    
+    JKPhotoBrowser().jk_pageControl = pageIndicator;
     //    JKPhotoBrowser().jk_hidesOriginalImageView = YES;
     [[JKPhotoManager sharedManager] jk_showPhotoBrowser];
     JKPhotoBrowser().jk_delegate = self;
     JKPhotoBrowser().jk_QRCodeRecognizerEnable = YES;
 }
 
+/// 将图片保存到相册的结果回调
 - (void)jk_handleImageWriteToSavedPhotosAlbumWithError:(NSError *)error {
     if (error) {
         /// UIAlertController的windowLevel不够高，显示不了，所以要用自定义的HUD，添加到JKPhotoBrowser().conetntView上显示
@@ -95,10 +103,21 @@
     }
 }
 
+///  处理二维码识别
 - (void)jk_handleQRCodeRecognitionResult:(NSString *)QRCodeContent {
     NSLog(@"%@",QRCodeContent);
     [JKPhotoBrowser() jk_hidesPhotoBrowserWhenPushed];
     [self.navigationController pushViewController:[JKViewController new] animated:YES];
+}
+
+/// 展示图片浏览器(更改状态栏)
+- (void)jk_phoneBrowserDidAppear {
+    self.statusBarStyle = UIStatusBarStyleLightContent;
+}
+
+/// 关闭图片浏览器(更改状态栏)
+- (void)jk_phoneBrowserDidDisappear {
+    self.statusBarStyle = UIStatusBarStyleDefault;
 }
 
 
@@ -107,5 +126,17 @@
 }
 
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return self.statusBarStyle;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return false;
+}
+
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle {
+    _statusBarStyle = statusBarStyle;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
 
 @end

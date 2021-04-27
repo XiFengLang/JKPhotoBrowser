@@ -13,6 +13,9 @@
 		46279F15258075DE00787769 /* JKPhoneBrowserFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 46279F0F258075DE00787769 /* JKPhoneBrowserFunction.m */; };
 		46279F16258075DE00787769 /* JKActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 46279F10258075DE00787769 /* JKActionSheet.m */; };
 		46279F17258075DE00787769 /* JKPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 46279F11258075DE00787769 /* JKPhotoManager.m */; };
+		4661A1362637E97F0010E422 /* JKPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4661A1352637E97F0010E422 /* JKPageControl.m */; };
+		4661A1392637F0250010E422 /* JKNumberPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4661A1382637F0250010E422 /* JKNumberPageControl.m */; };
+		4661A13C2637F3310010E422 /* JKSystemPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4661A13B2637F3310010E422 /* JKSystemPageControl.m */; };
 		9F1289201E5ABF8F0051A80B /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F12891F1E5ABF8F0051A80B /* ChatViewController.m */; };
 		9F1289231E5ABFD60051A80B /* MomentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1289221E5ABFD60051A80B /* MomentsViewController.m */; };
 		9F1289261E5AC0000051A80B /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1289251E5AC0000051A80B /* ChatTableViewCell.m */; };
@@ -59,6 +62,12 @@
 		46279F0F258075DE00787769 /* JKPhoneBrowserFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPhoneBrowserFunction.m; sourceTree = "<group>"; };
 		46279F10258075DE00787769 /* JKActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKActionSheet.m; sourceTree = "<group>"; };
 		46279F11258075DE00787769 /* JKPhotoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKPhotoManager.m; sourceTree = "<group>"; };
+		4661A1342637E97F0010E422 /* JKPageControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKPageControl.h; sourceTree = "<group>"; };
+		4661A1352637E97F0010E422 /* JKPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKPageControl.m; sourceTree = "<group>"; };
+		4661A1372637F0250010E422 /* JKNumberPageControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKNumberPageControl.h; sourceTree = "<group>"; };
+		4661A1382637F0250010E422 /* JKNumberPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKNumberPageControl.m; sourceTree = "<group>"; };
+		4661A13A2637F3310010E422 /* JKSystemPageControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKSystemPageControl.h; sourceTree = "<group>"; };
+		4661A13B2637F3310010E422 /* JKSystemPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKSystemPageControl.m; sourceTree = "<group>"; };
 		841EFACBB1F7CEDFCFAAE8B1 /* Pods-JKPhotoBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JKPhotoBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JKPhotoBrowser/Pods-JKPhotoBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 		9F12891E1E5ABF8F0051A80B /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		9F12891F1E5ABF8F0051A80B /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
@@ -127,19 +136,25 @@
 		46279F04258075DE00787769 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				46279F0E258075DE00787769 /* JKPhotoBrowser.h */,
 				46279F0A258075DE00787769 /* JKActionSheet.h */,
 				46279F10258075DE00787769 /* JKActionSheet.m */,
 				46279F07258075DE00787769 /* JKActionSheetCell.h */,
 				46279F0C258075DE00787769 /* JKActionSheetCell.m */,
+				4661A1372637F0250010E422 /* JKNumberPageControl.h */,
+				4661A1382637F0250010E422 /* JKNumberPageControl.m */,
+				4661A1342637E97F0010E422 /* JKPageControl.h */,
+				4661A1352637E97F0010E422 /* JKPageControl.m */,
 				46279F05258075DE00787769 /* JKPhoneBrowserFunction.h */,
 				46279F0F258075DE00787769 /* JKPhoneBrowserFunction.m */,
+				46279F0E258075DE00787769 /* JKPhotoBrowser.h */,
 				46279F08258075DE00787769 /* JKPhotoCollectionViewCell.h */,
 				46279F0B258075DE00787769 /* JKPhotoCollectionViewCell.m */,
 				46279F09258075DE00787769 /* JKPhotoManager.h */,
 				46279F11258075DE00787769 /* JKPhotoManager.m */,
 				46279F06258075DE00787769 /* JKPhotoModel.h */,
 				46279F0D258075DE00787769 /* JKPhotoModel.m */,
+				4661A13A2637F3310010E422 /* JKSystemPageControl.h */,
+				4661A13B2637F3310010E422 /* JKSystemPageControl.m */,
 			);
 			name = src;
 			path = ../../src;
@@ -393,13 +408,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4661A1362637E97F0010E422 /* JKPageControl.m in Sources */,
 				9F1289201E5ABF8F0051A80B /* ChatViewController.m in Sources */,
 				9FAC91921E55BCD300C47FD4 /* UIWindow+Extension.m in Sources */,
 				9F1289231E5ABFD60051A80B /* MomentsViewController.m in Sources */,
 				9F9982F91E51C3EE003796A0 /* ViewController.m in Sources */,
 				9FAC91C61E56C37000C47FD4 /* NSObject+GCDDelayTask.m in Sources */,
 				46279F14258075DE00787769 /* JKPhotoModel.m in Sources */,
+				4661A13C2637F3310010E422 /* JKSystemPageControl.m in Sources */,
 				9F1289261E5AC0000051A80B /* ChatTableViewCell.m in Sources */,
+				4661A1392637F0250010E422 /* JKNumberPageControl.m in Sources */,
 				9F9982F61E51C3EE003796A0 /* AppDelegate.m in Sources */,
 				9F9983551E529826003796A0 /* NSObject+JK.m in Sources */,
 				9F8BDB901E8A6BA0003F96EB /* JKViewController.m in Sources */,
