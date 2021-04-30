@@ -23,10 +23,6 @@ FOUNDATION_EXPORT CGFloat JKPhotoManager_ScreenHeight(void);
 FOUNDATION_EXPORT UIWindow * JKPhotoManager_KeyWindow(void);
 /// statusBar高度
 FOUNDATION_EXPORT CGFloat JKPhotoManager_StatusBarHeight(void);
-/// 设备
-FOUNDATION_EXPORT UIUserInterfaceIdiom JKPhotoManager_UserInterfaceIdiom(void);
-/// 刘海屏机型
-FOUNDATION_EXPORT BOOL JKPhotoManager_iPhoneX(void);
 /// ...
 FOUNDATION_EXPORT CGSize JKPhotoManager_MainScreenSize(void);
 /// 相对宽度(参考屏幕：iPhone11 Pro)

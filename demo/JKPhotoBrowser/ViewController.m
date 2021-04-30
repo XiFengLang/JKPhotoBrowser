@@ -139,4 +139,8 @@
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
+- (BOOL)prefersHomeIndicatorAutoHidden {
+    return true;
+}
+
 @end

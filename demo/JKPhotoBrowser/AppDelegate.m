@@ -8,6 +8,10 @@
 
 #import "AppDelegate.h"
 
+#import <SDWebImage/SDImageCodersManager.h>
+#import <SDWebImageWebPCoder/SDImageWebPCoder.h>
+
+
 @interface AppDelegate ()
 
 @end
@@ -17,6 +21,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    /// 添加Webp格式解码
+    [SDImageCodersManager.sharedManager addCoder:[SDImageWebPCoder sharedCoder]];
+    [SDWebImageDownloader.sharedDownloader setValue:@"image/webp,image/*,*/*;q=0.8" forHTTPHeaderField:@"Accept"];
+    
     return YES;
 }
 

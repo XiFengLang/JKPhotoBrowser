@@ -1,26 +1,49 @@
 PODS:
+  - AppleDevices (1.0.0)
+  - libwebp (1.2.0):
+    - libwebp/demux (= 1.2.0)
+    - libwebp/mux (= 1.2.0)
+    - libwebp/webp (= 1.2.0)
+  - libwebp/demux (1.2.0):
+    - libwebp/webp
+  - libwebp/mux (1.2.0):
+    - libwebp/demux
+  - libwebp/webp (1.2.0)
   - LookinServer (1.0.0)
   - Masonry (1.1.0)
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
+  - SDWebImageWebPCoder (0.8.3):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.10)
 
 DEPENDENCIES:
+  - AppleDevices
   - LookinServer
   - Masonry
   - SDWebImage
+  - SDWebImageWebPCoder
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - AppleDevices
+    - libwebp
     - LookinServer
     - Masonry
     - SDWebImage
+    - SDWebImageWebPCoder
+  trunk:
+    - SDWebImage
 
 SPEC CHECKSUMS:
+  AppleDevices: 437bb7c4e2dd769d3e73af704adfbb1a16143624
+  libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
   LookinServer: 0002891cd3cec5e082a910e897dfe71b4f06b89e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SDWebImageWebPCoder: bbf46e29fb8d1980a78ad3d5e9b4123c77f10ebc
 
-PODFILE CHECKSUM: 494b673a4af60546b3efe1ebbc01aac66c675522
+PODFILE CHECKSUM: 5de06b08a6e06677d7c811e13f798301bc3a9f48
 
 COCOAPODS: 1.10.1

@@ -9,6 +9,7 @@
 #import "JKPhotoManager.h"
 #import "JKPhotoCollectionViewCell.h"
 #import "JKActionSheet.h"
+#import <AppleDevices/AppleDevice.h>
 
 @interface JKPhotoManager () <
 UICollectionViewDelegateFlowLayout,
@@ -46,8 +47,8 @@ JKPhotoCollectionViewCellDelegate>
         return;
     }
     
-    BOOL isIPhoneX = JKPhotoManager_iPhoneX();
-    CGFloat YAxis = JKPhotoManager_ScreenHeight() - (isIPhoneX ? 76 : 40);
+    BOOL isIPhoneX = AppleDevice.isNotchDesignStyle;
+    CGFloat YAxis = JKPhotoManager_ScreenHeight() - (isIPhoneX ? 56 : 30);
     
     jk_pageControl.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
     jk_pageControl.frame = CGRectMake(0, YAxis, JKPhotoManager_ScreenWidth(), 40);

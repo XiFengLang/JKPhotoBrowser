@@ -15,6 +15,9 @@ target 'JKPhotoBrowser' do
   pod 'Masonry'
   # 5.9.4
   pod 'SDWebImage'
+  pod 'SDWebImageWebPCoder'
+  
+  pod 'AppleDevices'
   
   pod 'LookinServer', :configurations => ['Debug']
   #pod 'JKImageBrowser', '~> 1.0.9'
