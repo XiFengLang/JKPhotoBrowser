@@ -104,6 +104,10 @@ JKPhotoCollectionViewCellDelegate>
         NSLog(@"<JKPhotoModel *> * jk_itemArray 是空数组");
         return;
     }
+    if (self.jk_contentView.superview != nil) {
+        /// 防止快速点击，重复弹出
+        return;
+    }
     
     [self jk_resignFirstResponderIfNeeded];
     
@@ -125,7 +129,7 @@ JKPhotoCollectionViewCellDelegate>
         self.jk_pageControl.currentPage = self.jk_currentIndex;
     }
     
-    self.jk_contentView.userInteractionEnabled = false;
+    self.collectionView.userInteractionEnabled = false;
     self.jk_contentView.autoresizesSubviews = NO;
     self.isFirstTimeZoomImage = YES;
     
@@ -140,7 +144,7 @@ JKPhotoCollectionViewCellDelegate>
         self.jk_contentView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:1.f];
         pageController.alpha = 1.f;
     } completion:^(BOOL finished) {
-        self.jk_contentView.userInteractionEnabled = true;
+        self.collectionView.userInteractionEnabled = true;
         
         if ([self.jk_delegate respondsToSelector:@selector(jk_phoneBrowserDidAppear)]) {
             [self.jk_delegate jk_phoneBrowserDidAppear];
