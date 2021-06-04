@@ -10,6 +10,7 @@
 #import "JKPhotoModel.h"
 #import "JKPhoneBrowserFunction.h"
 #import "JKPageControl.h"
+#import <AppleDevices/AppleDevice.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

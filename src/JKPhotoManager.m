@@ -9,7 +9,7 @@
 #import "JKPhotoManager.h"
 #import "JKPhotoCollectionViewCell.h"
 #import "JKActionSheet.h"
-#import <AppleDevices/AppleDevice.h>
+
 
 @interface JKPhotoManager () <
 UICollectionViewDelegateFlowLayout,

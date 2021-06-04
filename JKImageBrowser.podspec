@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "JKImageBrowser"
-  s.version      = "1.2.0"
+  s.version      = "1.2.1"
   s.summary      = "图片浏览控件"
   s.homepage     = "https://github.com/XiFengLang/JKPhotoBrowser"
 
@@ -30,6 +30,7 @@ Pod::Spec.new do |s|
   s.source_files = "src/*.{h,m}"
   s.dependency 'SDWebImage'
   s.dependency 'Masonry'
+  s.dependency 'AppleDevices'
   
 
 end
